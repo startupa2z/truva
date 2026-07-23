@@ -1,6 +1,21 @@
-# wrangler files
+# Environment and secrets
+.env*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Cloudflare Wrangler (optional local tooling)
 .wrangler
 .dev.vars*
 !.dev.vars.example
-.env*
-!.env.example
+
+# IDE
+.idea/
+.vscode/

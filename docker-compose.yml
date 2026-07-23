@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: truva-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: truva
+      POSTGRES_PASSWORD: truva
+      POSTGRES_DB: truva
+    ports:
+      - "5433:5432"
+    volumes:
+      # Persistent database storage (survives container restarts/removals)
+      - postgres_data:/var/lib/postgresql/data
+      # Runs once on first boot to create the users table and indexes
+      - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U truva -d truva"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: truva-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://truva:truva@db:5432/truva
+      FRONTEND_URL: http://localhost:8888
+      LINKEDIN_REDIRECT_URI: http://localhost:8000/api/auth/linkedin/callback
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./frontend:/site:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: truva-frontend
+    restart: unless-stopped
+    ports:
+      - "8888:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+volumes:
+  postgres_data:
+    name: truva_postgres_data
