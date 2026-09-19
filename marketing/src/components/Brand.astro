@@ -1,0 +1,20 @@
+---
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<a class:list={["brand", { compact }]} href="/">
+  <img
+    src="/images/truva-mark.webp"
+    alt=""
+    width="38"
+    height="41"
+    fetchpriority="high"
+  />
+  <span class="brand-name">
+    truva <span class="brand-sub">SOLUTIONS</span>
+    <span class="sr-only"> home</span>
+  </span>
+</a>

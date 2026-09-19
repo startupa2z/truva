@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/.local
+**/dist
+**/.astro
+**/artifacts
+**/.env*
+backend
+marketing/infographic
+marketing/brand
+marketing/docs

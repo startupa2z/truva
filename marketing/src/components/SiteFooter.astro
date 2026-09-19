@@ -1,0 +1,46 @@
+---
+import Brand from "./Brand.astro";
+import Arrow from "./Arrow.astro";
+import { site } from "../data/site";
+---
+
+<footer class="site-footer section-border">
+  <div class="shell">
+    <div class="footer-main">
+      <div>
+        <Brand />
+        <p>
+          Practical security.
+          <br />
+          Room to grow.
+        </p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="/services">Services</a>
+        <a href="/">Home</a>
+        <a href="/#who-we-serve">Who we serve</a>
+        <a href="/#why-truva">What sets us apart</a>
+        <a href="/#about">About Truva</a>
+        <a href="/security-hub">Security Hub</a>
+        <a href="/resources/blogs">Blogs</a>
+        <a href="/#consult">Contact</a>
+      </nav>
+      <div class="footer-contact">
+        <p>California · Serving the US remotely</p>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <p><a href="/privacy">Privacy</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>
+        © {new Date().getFullYear()} {site.legalName}
+      </span>
+      {site.preview && (
+      <a href="/design-system">
+        Phase 1 · Design system & review notes
+        <Arrow diagonal />
+      </a>
+      )}
+    </div>
+  </div>
+</footer>

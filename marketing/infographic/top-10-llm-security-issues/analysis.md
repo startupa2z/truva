@@ -1,0 +1,1 @@
+Audience: founders and engineering/security leaders. Goal: recognize ten concrete issues at a glance, then read implementation checks. User selected a clean numbered grid, blue/orange. Portrait 4:5, technical line icons; no unsupported statistics.

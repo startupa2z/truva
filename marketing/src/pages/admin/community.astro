@@ -1,0 +1,216 @@
+---
+import { site } from "../../data/site";
+import Base from "../../layouts/Base.astro";
+---
+
+<Base
+  title="Community & visits | Truva admin"
+  description="Private comment moderation and page-view counts."
+>
+  <main id="main" class="shell admin-page">
+    <a href="/">← Website</a>
+    <h1>Visits &amp; conversations.</h1>
+    <p>
+      Private administration. Page views count visits to pages; visitor counts estimate distinct browsers.
+      A visitor ID expires after 30 days. Different devices, cleared storage, and bots can affect totals.
+      Privacy opt-outs are excluded.
+    </p>
+    <form id="admin-login">
+      <label for="admin-key">Admin key</label>
+      <input id="admin-key" type="password" autocomplete="off" required />
+      <button class="button">Sign in</button>
+      {site.preview && <p>Local admin key: <code>marketing/.local/admin-key.txt</code>.</p>}
+    </form>
+    <p id="admin-status" role="status"></p>
+    <section id="admin-panel" hidden>
+      <div class="admin-toolbar">
+        <button id="admin-refresh" class="button">
+          Refresh
+        </button>
+        <button id="admin-logout" class="button">
+          Sign out
+        </button>
+      </div>
+      <h2 id="views-total"></h2>
+      <p id="visitors-total"></p>
+      <h3>Views by page</h3>
+      <div id="page-counts"></div>
+      <h3>Recent daily views (UTC)</h3>
+      <div id="daily-counts"></div>
+      <h2>Comment moderation</h2>
+      <p>
+        Approve, reject, or return a comment to pending. Only approved comments
+        are public.
+      </p>
+      <div id="moderation-list"></div>
+    </section>
+  </main>
+</Base>
+<script>
+  const panel = document.querySelector<HTMLElement>("#admin-panel")!;
+  const form = document.querySelector<HTMLFormElement>("#admin-login")!;
+  const status = document.querySelector<HTMLElement>("#admin-status")!;
+  async function api(path: string, options: RequestInit = {}) {
+    const response = await fetch(`/api/admin/${path}`, options);
+    const data = await response.json();
+    if (!response.ok) throw Error(data.error || "Request failed");
+    return data;
+  }
+  function line(container: Element, text: string) {
+    const p = document.createElement("p");
+    p.textContent = text;
+    container.append(p);
+  }
+  async function refresh() {
+    try {
+      const data = await api("overview");
+      panel.hidden = false;
+      form.hidden = true;
+      document.querySelector("#views-total")!.textContent =
+        `${data.totalViews.toLocaleString()} recorded page views`;
+      document.querySelector("#visitors-total")!.textContent =
+        `${data.visitorsToday.toLocaleString()} visitors today · ${data.visitors30Days.toLocaleString()} visitors in the last 30 days (estimated browsers)`;
+      const pages = document.querySelector("#page-counts")!;
+      pages.replaceChildren();
+      for (const row of data.pages) line(pages, `${row.path} — ${row.views}`);
+      if (!data.pages.length) line(pages, "No recorded views yet.");
+      const days = document.querySelector("#daily-counts")!;
+      days.replaceChildren();
+      for (const row of data.days) line(days, `${row.day} — ${row.views} views · ${row.visitors} visitors`);
+      const list = document.querySelector("#moderation-list")!;
+      list.replaceChildren();
+      if (!data.comments.length) line(list, "No comments submitted yet.");
+      for (const item of data.comments) {
+        const card = document.createElement("article");
+        const title = document.createElement("h3");
+        title.textContent = `${item.name} · ${item.status}`;
+        card.append(title);
+        line(card, item.slug);
+        line(card, item.body);
+        for (const state of ["approved", "rejected", "pending"]) {
+          const button = document.createElement("button");
+          button.textContent =
+            state === "approved"
+              ? "Approve"
+              : state === "rejected"
+                ? "Reject"
+                : "Set pending";
+          button.disabled = item.status === state;
+          button.addEventListener("click", async () => {
+            try {
+              await api("comments", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: item.id, status: state }),
+              });
+              await refresh();
+            } catch (e) {
+              status.textContent = String(e);
+            }
+          });
+          card.append(button);
+        }
+        list.append(card);
+      }
+      status.textContent = "";
+    } catch (e) {
+      panel.hidden = true;
+      form.hidden = false;
+      status.textContent = String(e);
+    }
+  }
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      const input = document.querySelector<HTMLInputElement>("#admin-key")!;
+      await api("session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: input.value }),
+      });
+      input.value = "";
+      await refresh();
+    } catch (e) {
+      status.textContent = String(e);
+    }
+  });
+  document.querySelector("#admin-refresh")!.addEventListener("click", refresh);
+  document
+    .querySelector("#admin-logout")!
+    .addEventListener("click", async () => {
+      await api("logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+      });
+      panel.hidden = true;
+      form.hidden = false;
+      status.textContent = "Signed out.";
+    });
+  refresh();
+</script>
+<style>
+  .admin-page {
+    max-width: 960px;
+    padding-block: 50px;
+  }
+  h1 {
+    font-size: 48px;
+    margin: 24px 0;
+  }
+  h2 {
+    font-size: 30px;
+    margin: 28px 0 15px;
+  }
+  h3 {
+    margin-top: 25px;
+    font-size: 22px;
+  }
+  p {
+    margin: 16px 0;
+    overflow-wrap: anywhere;
+  }
+  form {
+    margin-top: 30px;
+  }
+  input {
+    border: 1px solid #aaa;
+    padding: 12px;
+    border-radius: 4px;
+    display: block;
+    margin: 8px 0 16px;
+    width: min(100%, 420px);
+  }
+  button {
+    cursor: pointer;
+    border: 0;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .admin-toolbar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  #moderation-list :global(article) {
+    border: 1px solid var(--color-line);
+    padding: 24px;
+    margin-top: 24px;
+    border-radius: 8px;
+  }
+  #moderation-list :global(button) {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid var(--color-brand-blue);
+    border-radius: 4px;
+  }
+  #moderation-list :global(p) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  code {
+    overflow-wrap: anywhere;
+  }
+</style>

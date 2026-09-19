@@ -1,0 +1,367 @@
+---
+import Base from "../layouts/Base.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import Arrow from "../components/Arrow.astro";
+import BookingLink from "../components/BookingLink.astro";
+import { site } from "../data/site";
+const services = [
+  {
+    number: "01",
+    id: "ai-security",
+    title: "AI Security Assessment",
+    timeline: "2–4 weeks",
+    scope: "One agreed AI application or agent workflow.",
+    frameworks: [
+      {
+        name: "OWASP LLM Top 10 (2025)",
+        url: "https://genai.owasp.org/llm-top-10/",
+      },
+      {
+        name: "NIST AI RMF",
+        url: "https://www.nist.gov/itl/ai-risk-management-framework",
+      },
+    ],
+    checks: [
+      "Prompt injection and unsafe model output handling",
+      "Sensitive data exposure and RAG access boundaries",
+      "Agent permissions, tool use, and human approval controls",
+      "AI API access, secrets, and third-party dependencies",
+      "Logging, abuse monitoring, and usage limits",
+    ],
+    deliverables: [
+      "Executive summary and prioritized findings with test evidence",
+      "Framework mapping and practical remediation roadmap",
+      "Technical findings walkthrough with your team",
+    ],
+    description:
+      "Identify and remediate risks specific to AI and LLM deployments, including prompt injection, model poisoning, data leakage, insecure integrations, and AI supply chain threats. Get a risk report and a hardening roadmap tailored to your stack.",
+    tags: ["LLM & agent assessments", "AI risk & governance"],
+    cta: "Discuss AI security",
+    subject: "AI security assessment",
+    path: "M5 8h14M5 16h14M8 5v14M16 5v14M4 4h16v16H4z",
+  },
+  {
+    number: "02",
+    id: "cloud-security",
+    title: "Cloud Security Assessment",
+    timeline: "3–4 weeks",
+    scope: "An agreed set of AWS, Azure, or Google Cloud accounts.",
+    frameworks: [
+      {
+        name: "CIS Benchmarks",
+        url: "https://www.cisecurity.org/cis-benchmarks",
+      },
+    ],
+    checks: [
+      "CSPM review of cloud configuration and security posture",
+      "Public storage, exposed services, and network access rules",
+      "IAM permissions, privileged access, and unused credentials",
+      "Encryption, key management, and secrets handling",
+      "Audit logging, alert coverage, and backup configuration",
+    ],
+    deliverables: [
+      "Cloud posture report with validated, prioritized findings",
+      "Asset-level remediation backlog and configuration guidance",
+      "Readout covering exposure, owners, and recommended next steps",
+    ],
+    description:
+      "Review your AWS, Azure, or GCP environment, from access policies and network architecture to storage, logging, and monitoring. Identify misconfigurations, privilege escalation paths, and compliance gaps, with a prioritized remediation roadmap your team can act on.",
+    tags: ["AWS · Azure · Google Cloud", "Configuration & access reviews"],
+    cta: "Discuss cloud security",
+    subject: "Cloud security assessment",
+    path: "M7 17a5 5 0 0 1-1-10 6 6 0 0 1 11-1 5.5 5.5 0 0 1 0 11H7Z",
+  },
+  {
+    number: "03",
+    id: "compliance",
+    title: "Governance & Compliance",
+    timeline: "4–8 weeks",
+    scope:
+      "Readiness assessment for one selected framework and agreed business scope.",
+    frameworks: [
+      {
+        name: "SOC 2",
+        url: "https://www.aicpa-cima.com/resources/landing/system-and-organization-controls-soc-suite-of-services",
+      },
+      { name: "ISO 27001", url: "https://www.iso.org/standard/27001" },
+      { name: "ISO 42001", url: "https://www.iso.org/standard/42001" },
+    ],
+    checks: [
+      "Framework scope, control ownership, and accountability",
+      "Policies, risk assessment, and exception management",
+      "Access reviews, change management, and incident response evidence",
+      "Vendor oversight and data handling processes",
+      "AI inventory and lifecycle governance for ISO 42001 scope",
+    ],
+    deliverables: [
+      "Readiness gap assessment and prioritized action plan",
+      "Control-to-evidence matrix with owners and missing evidence",
+      "Policy improvement recommendations and audit preparation roadmap",
+    ],
+    description:
+      "Build or mature your security program. We help you design policies, implement controls, prepare for audits, and establish a repeatable compliance posture, so you can meet customer security questionnaires with confidence.",
+    tags: ["SOC 2 · ISO 27001 · ISO 42001", "Readiness through audit support"],
+    cta: "Discuss compliance",
+    subject: "Compliance readiness",
+    path: "M7 3h10v4H7zM7 5H4v16h16V5h-3M8 12l2 2 5-5M8 18h8",
+  },
+];
+---
+
+<Base
+  title="AI, Cloud Security & Compliance Services | Truva"
+  description="Explore Truva’s AI security, cloud security, and compliance services for your technology, processes, and business."
+>
+  <SiteHeader />
+  <main id="main" class="service-page">
+    <section
+      id="services"
+      class="section shell"
+      aria-labelledby="services-title"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">OUR CORE SERVICE PACKAGES</p>
+          <h1 id="services-title">
+            Three core packages.
+            <br />A clear path forward.
+          </h1>
+        </div>
+        <p>
+          For startups and SaaS teams that need to earn customer trust without
+          building a full-time security team.
+        </p>
+      </div>
+      <div class="services-grid grid md:grid-cols-3">
+        {services.map((service) => (
+          <article id={service.id} class="service-card flex flex-col">
+            <div class="card-top">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d={service.path}
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span>{service.number}</span>
+            </div>
+            <h2 class="package-title">{service.title}</h2>
+            <div class="package-timeline">
+              <span>Estimated delivery</span>
+              <strong>{service.timeline}</strong>
+            </div>
+            <p class="package-scope">{service.scope}</p>
+            <div class="package-block">
+              <h3>Frameworks &amp; references</h3>
+              <div class="package-frameworks">
+                {service.frameworks.map((f) => (
+                  <a href={f.url}>{f.name} ↗</a>
+                ))}
+              </div>
+              {service.id === "cloud-security" && (
+                <p class="package-note">
+                  Applicable cloud-provider security guidance also informs the
+                  review.
+                </p>
+              )}
+            </div>
+            <div class="package-block">
+              <h3>
+                {service.id === "compliance"
+                  ? "What we review"
+                  : "What we test & review"}
+              </h3>
+              <ul class="package-list">
+                {service.checks.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="package-block package-deliverables">
+              <h3>What you receive</h3>
+              <ul class="package-list">
+                {service.deliverables.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <a class="text-link mt-auto" href={site.bookingUrl}>
+              {service.cta}
+              <Arrow />
+            </a>
+          </article>
+        ))}
+      </div>
+      <p class="section-footnote">
+        Timelines are planning estimates from kickoff once agreed access and
+        inputs are available. Final scope and delivery dates are confirmed in
+        the proposal. Implementation and retesting are scoped separately.
+        Governance timelines cover the readiness assessment, not the full
+        remediation program, SOC 2 observation period, or independent audit.
+      </p>
+    </section>
+    <section
+      class="section shell section-border"
+      aria-labelledby="compliance-title"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">GOVERNANCE &amp; COMPLIANCE / FRAMEWORK OPTIONS</p>
+          <h2 id="compliance-title">Choose the framework that fits.</h2>
+        </div>
+        <p>
+          Policies, controls, and audit preparation aligned to the requirements
+          that matter to your business.
+        </p>
+      </div>
+      <div class="services-grid grid md:grid-cols-3">
+        <article id="soc-2" class="service-card flex flex-col">
+          <h3>SOC 2</h3>
+          <p>
+            Prepare for SOC 2 with practical policies, security controls, and
+            organized evidence. We support Type I and Type II readiness and help
+            your team respond to customer security reviews.
+          </p>
+          <a
+            class="text-link mt-auto"
+            href={`mailto:${site.email}?subject=SOC%202%20readiness`}
+          >
+            Discuss SOC 2 <Arrow />
+          </a>
+        </article>
+        <article id="iso-27001" class="service-card flex flex-col">
+          <h3>ISO 27001</h3>
+          <p>
+            Build or mature your information security management system.
+            Establish risk assessments, policies, controls, and clear ownership
+            to prepare for an independent certification audit.
+          </p>
+          <a
+            class="text-link mt-auto"
+            href={`mailto:${site.email}?subject=ISO%2027001%20readiness`}
+          >
+            Discuss ISO 27001 <Arrow />
+          </a>
+        </article>
+        <article id="iso-42001" class="service-card flex flex-col">
+          <h3>ISO 42001</h3>
+          <p>
+            Develop an AI management system with clear governance, risk
+            assessment, and accountability. Bring your AI processes and
+            supporting evidence together for certification readiness.
+          </p>
+          <a
+            class="text-link mt-auto"
+            href={`mailto:${site.email}?subject=ISO%2042001%20readiness`}
+          >
+            Discuss ISO 42001 <Arrow />
+          </a>
+        </article>
+      </div>
+      <p class="section-footnote">
+        Truva supports readiness and audit preparation. Independent auditors
+        issue SOC 2 reports; certification bodies issue ISO certifications.
+      </p>
+    </section>
+    <div class="shell page-consult">
+      <BookingLink />
+    </div>
+  </main>
+  <SiteFooter />
+</Base>
+
+<style>
+  .service-page > .section:first-child {
+    padding-top: 48px;
+  }
+  .package-title {
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+  }
+  .package-timeline {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    background: #edf2fa;
+    border-radius: 6px;
+    margin-top: 20px;
+    color: #243a6c;
+  }
+  .package-timeline span {
+    font-size: 11px;
+  }
+  .package-timeline strong {
+    font-size: 16px;
+    white-space: nowrap;
+  }
+  .service-card .package-scope {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  .package-block {
+    margin-top: 24px;
+  }
+  .package-block h3 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  .package-frameworks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .package-frameworks a {
+    padding: 6px 8px;
+    border: 1px solid #d4dce8;
+    border-radius: 5px;
+    font-size: 11px;
+    color: #243a6c;
+  }
+  .package-frameworks a:hover {
+    text-decoration: underline;
+  }
+  .package-list {
+    list-style: disc;
+    padding-left: 18px;
+    margin-top: 12px;
+  }
+  .package-list li {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #525965;
+    margin-bottom: 9px;
+  }
+  .package-deliverables {
+    border-top: 1px solid var(--color-line);
+    padding-top: 20px;
+    margin-bottom: 26px;
+  }
+  .service-card .package-note {
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 10px;
+  }
+  @media (max-width: 767px) {
+    .service-page > .section:first-child {
+      padding-top: 32px;
+    }
+    .package-title {
+      font-size: 25px;
+    }
+  }
+</style>

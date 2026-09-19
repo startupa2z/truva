@@ -1,0 +1,82 @@
+---
+import { site } from "../data/site";
+import AboutMenu from "./AboutMenu.astro";
+import Brand from "./Brand.astro";
+import BookingLink from "./BookingLink.astro";
+import ServicesMenu from "./ServicesMenu.astro";
+import ResourcesMenu from "./ResourcesMenu.astro";
+---
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <Brand />
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a
+        href="/"
+        aria-current={Astro.url.pathname === "/" ? "page" : undefined}
+      >
+        Home
+      </a>
+      <ServicesMenu />
+      <AboutMenu />
+      <ResourcesMenu />
+    </nav>
+    <BookingLink label="Book a consult" small />
+    <details class="mobile-nav">
+      <summary aria-label="Navigation menu">
+        <span></span>
+        <span></span>
+      </summary>
+      <nav aria-label="Mobile navigation">
+        <a
+          href="/"
+          aria-current={Astro.url.pathname === "/" ? "page" : undefined}
+        >
+          Home
+        </a>
+        <ServicesMenu />
+        <AboutMenu />
+        <ResourcesMenu />
+        <a href={site.bookingUrl || "/#consult"}>Book a consult</a>
+      </nav>
+    </details>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>(".mobile-nav");
+  menu?.querySelectorAll("a").forEach((link) =>
+    link.addEventListener("click", () => {
+      menu.open = false;
+      menu
+        .querySelectorAll<HTMLDetailsElement>(
+          ".services-menu, .compliance-menu",
+        )
+        .forEach((item) => (item.open = false));
+    }),
+  );
+  document
+    .querySelectorAll<HTMLDetailsElement>(".services-menu, .compliance-menu")
+    .forEach((dropdown) => {
+      dropdown
+        .querySelectorAll("a")
+        .forEach((link) =>
+          link.addEventListener("click", () => (dropdown.open = false)),
+        );
+      dropdown.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && dropdown.open) {
+          event.stopPropagation();
+          dropdown.open = false;
+          dropdown.querySelector("summary")?.focus();
+        }
+      });
+      document.addEventListener("click", (event) => {
+        if (!dropdown.contains(event.target as Node)) dropdown.open = false;
+      });
+    });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu?.open) {
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    }
+  });
+</script>

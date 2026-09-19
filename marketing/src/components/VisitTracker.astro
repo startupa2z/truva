@@ -1,0 +1,43 @@
+<script>
+  const path = location.pathname.replace(/\/$/, "") || "/";
+  if (
+    !path.startsWith("/admin") &&
+    path !== "/design-system" &&
+    navigator.doNotTrack !== "1" &&
+    !(navigator as Navigator & { globalPrivacyControl?: boolean })
+      .globalPrivacyControl
+  ) {
+    try {
+      if (localStorage.getItem("truva-analytics-disabled") === "true") throw Error("Opted out");
+      const visitorKey = "truva-visitor";
+      let visitor = JSON.parse(localStorage.getItem(visitorKey) || "null");
+      if (!visitor || Date.now() - visitor.time > 2592000000) {
+        visitor = { id: crypto.randomUUID(), time: Date.now() };
+        localStorage.setItem(visitorKey, JSON.stringify(visitor));
+      }
+      const key = `truva-view:${path}`;
+      const stored = sessionStorage.getItem(key);
+      let event = stored ? JSON.parse(stored) : null;
+      if (!event || Date.now() - event.time > 1800000) {
+        event = { id: crypto.randomUUID(), time: Date.now() };
+        sessionStorage.setItem(key, JSON.stringify(event));
+      }
+      fetch("/api/views", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path, eventId: event.id, visitorId: visitor.id }),
+        keepalive: true,
+      })
+        .then((r) => {
+          if (!r.ok) throw Error();
+          return r.json();
+        })
+        .then((data) =>
+          window.dispatchEvent(new CustomEvent("truva-view", { detail: data })),
+        )
+        .catch(() => {});
+    } catch {
+      /* Tracking must never block the site. */
+    }
+  }
+</script>

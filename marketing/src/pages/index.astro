@@ -1,0 +1,214 @@
+---
+import CompanySections from "../components/CompanySections.astro";
+import Base from "../layouts/Base.astro";
+import BookingLink from "../components/BookingLink.astro";
+import Arrow from "../components/Arrow.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import SecurityIllustration from "../components/SecurityIllustration.astro";
+import { site } from "../data/site";
+import clients from "../data/clients.json";
+import { insights } from "../data/insights";
+const steps = [
+  {
+    name: "Assess",
+    text: "Start with your technology, processes, customers, and the risks that matter. Agree on a clear scope.",
+  },
+  {
+    name: "Remediate",
+    text: "Work through a prioritized plan. Put practical controls in place with your team.",
+  },
+  {
+    name: "Prepare for audit",
+    text: "Organize evidence and support independent auditors or certification bodies when needed.",
+  },
+  {
+    name: "Sustain",
+    text: "Keep ownership clear. Review changes and maintain the practices as your business grows.",
+  },
+];
+---
+
+<Base
+  title="Startup Security & Compliance Consulting | Truva Solutions"
+  description="AI security, cloud security, and SOC 2 and ISO readiness for startups. Senior-led, practical support. Book a free 30-minute security consult."
+>
+  <SiteHeader />
+  <main id="main">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">
+          <span class="tiny-line"></span> AI SECURITY · CLOUD SECURITY ·
+          COMPLIANCE
+        </p>
+        <h1 id="hero-title">
+          Protect your business.
+          <br />
+          <span>Win customer trust.</span>
+        </h1>
+        <p class="hero-description">
+          We find and fix risks across your AI, cloud, and business
+          processes—and help you prepare for SOC&nbsp;2 and ISO audits.
+        </p>
+        <BookingLink label="Let’s talk about your security" />
+        <p class="hero-note">Start with a free 30-minute conversation.</p>
+      </div>
+      <div class="hero-art">
+        <SecurityIllustration />
+      </div>
+    </section>
+    {site.preview && (
+    <section
+      id="clients"
+      class="client-strip section-border"
+      aria-label="Client proof awaiting approval"
+    >
+      <div class="shell client-strip-inner">
+        <span class="eyebrow">GOOD WORK. SHARED WITH PERMISSION.</span>
+        <p class="placeholder-note">{clients.todo.clients}</p>
+      </div>
+    </section>
+    )}
+    <CompanySections />
+    <section
+      id="approach"
+      class="section shell section-border"
+      aria-labelledby="approach-title"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">01 / HOW WE WORK</p>
+          <h2 id="approach-title">
+            Clear steps.
+            <br />
+            Lasting progress.
+          </h2>
+        </div>
+        <p>
+          You work directly with senior practitioners, bringing{" "}
+          {site.experience.toLowerCase()} to your technology and processes. We
+          make the priorities clear and help your team put them into practice.
+        </p>
+      </div>
+      <ol class="steps-grid grid md:grid-cols-4">
+        {steps.map((step, i) => (
+          <li>
+            <span class="step-number">0{i + 1}</span>
+            <h3>{step.name}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="section-footnote">
+        Truva supports readiness and audit preparation. Independent auditors
+        issue SOC 2 reports; certification bodies issue ISO certifications.
+      </p>
+    </section>
+    {site.preview && (
+    <section
+      id="proof"
+      class="section shell section-border"
+      aria-labelledby="proof-title"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">02 / THE WORK SHOULD SPEAK</p>
+          <h2 id="proof-title">Proof, with context.</h2>
+        </div>
+        <p>
+          Client outcomes and stories will appear here once the results and
+          permission to share them are confirmed.
+        </p>
+      </div>
+      <div class="proof-grid grid md:grid-cols-3">
+        {clients.todo.metrics.map((item, i) => (
+          <div class="proof-card">
+            <span class="proof-index">0{i + 1} / TO BE VERIFIED</span>
+            <p>{item}</p>
+          </div>
+        ))}
+      </div>
+      <div class="testimonial-placeholder">
+        <span class="eyebrow">CLIENT PERSPECTIVE</span>
+        <p class="placeholder-note">{clients.todo.testimonials}</p>
+      </div>
+    </section>
+    )}
+    <section
+      id="insights"
+      class="section shell section-border"
+      aria-labelledby="insights-title"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">03 / INSIGHTS</p>
+          <h2 id="insights-title">
+            A little clarity
+            <br />
+            goes a long way.
+          </h2>
+        </div>
+        <a class="text-link" href="/security-hub">
+          Explore the Security Hub
+          <Arrow />
+        </a>
+      </div>
+      <div class="insights-grid grid md:grid-cols-3">
+        {insights.map((post) => (
+          <article class="insight-card">
+            <a href={post.local ? post.url : `${site.url}${post.url}`}>
+              <div class="insight-top">
+                <span class="eyebrow">{post.category}</span>
+                <Arrow diagonal />
+              </div>
+              <h3>{post.title}</h3>
+              <p>{post.description}</p>
+              <span class="read-label">Read the article</span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="closing-cta" aria-labelledby="closing-title">
+      <div class="shell closing-inner">
+        <div>
+          <p class="eyebrow">YOUR NEXT STEP</p>
+          <h2 id="closing-title">
+            Let’s make security
+            <br />a reason you move forward.
+          </h2>
+          <p>Tell us what you’re building. We’ll start there.</p>
+        </div>
+        <BookingLink label="Book a free 30-minute consult" light />
+      </div>
+    </section>
+    <section
+      id="consult"
+      class="consult-section shell"
+      aria-labelledby="consult-title"
+    >
+      <div>
+        <p class="eyebrow">LET’S TALK</p>
+        <h2 id="consult-title">A conversation, not a commitment.</h2>
+        <p>
+          Share what you’re building and the security question in front of you.
+          Choose a time for a free 30-minute call.
+        </p>
+      </div>
+      <div class="consult-action">
+        <BookingLink label="Choose a consultation time" />
+        <a
+          class="text-link"
+          href={`mailto:${site.email}?subject=${encodeURIComponent("Free 30-minute security consult")}`}
+        >
+          {site.email}
+          <Arrow diagonal />
+        </a>
+        <p class="booking-note">
+          30 minutes · Google Meet · Select a time on Calendly
+        </p>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</Base>

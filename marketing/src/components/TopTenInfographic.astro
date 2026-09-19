@@ -1,0 +1,73 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+}
+const { slug, title } = Astro.props;
+---
+
+<figure class="top-ten-graphic">
+  <a
+    href={`/infographics/${slug}.png`}
+    aria-label={`Open full-size infographic: ${title}`}
+  >
+    <img
+      src={`/infographics/${slug}.webp`}
+      width="1024"
+      height="1280"
+      alt={`${title}. A numbered overview; every issue and action is explained in the article below.`}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </a>
+  <figcaption>
+    <a href="/security-hub" class="graphic-brand">
+      <img src="/images/truva-mark.webp" alt="" width="20" height="22" /> Truva
+      Solutions · Security Hub
+    </a>
+    <span>© 2026 TRUVA SOLUTIONS</span>
+    <a href={`/infographics/${slug}.png`} download>
+      Download infographic ↓
+    </a>
+  </figcaption>
+</figure>
+<style>
+  .graphic-brand {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+  }
+  .graphic-brand img {
+    width: 20px;
+    height: 22px;
+    border: 0;
+    border-radius: 0;
+  }
+  .top-ten-graphic {
+    margin: 0;
+  }
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--color-line);
+  }
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--color-muted);
+    margin-top: 12px;
+  }
+  figcaption > span {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+  figcaption a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

@@ -1,0 +1,621 @@
+---
+import BlogCommunity from "../../components/BlogCommunity.astro";
+import TopTenInfographic from "../../components/TopTenInfographic.astro";
+import Base from "../../layouts/Base.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import BookingLink from "../../components/BookingLink.astro";
+import { risks, sources } from "../../data/ai-security-article";
+const title = "Top 10 AI Security Issues to Address | Truva Solutions";
+const description =
+  "Ten AI security issues explained with practical examples, first actions, and evidence to collect. A guide for founders and security teams.";
+const words = risks
+  .map((risk) =>
+    [risk.title, risk.body, risk.example, ...risk.actions, risk.evidence].join(
+      " ",
+    ),
+  )
+  .join(" ")
+  .split(/\s+/).length;
+const minutes = Math.ceil((words + 350) / 220);
+---
+
+<Base title={title} description={description}>
+  <SiteHeader />
+  <main id="main" class="ai-article">
+    <header class="article-hero shell">
+      <a class="article-back" href="/resources/blogs">
+        ← All blogs
+      </a>
+      <div class="article-hero-grid">
+        <div>
+          <p class="eyebrow">THE TRUVA FIELD GUIDE / AI SECURITY</p>
+          <h1>
+            10 AI security issues.
+            <br />
+            <span>Know where to look.</span>
+          </h1>
+          <p class="article-deck">
+            From the tools your team uses to the actions your agents take: a
+            practical guide to finding risk and deciding what to fix first.
+          </p>
+          <div class="article-meta">
+            <span>Truva Solutions</span>
+            <span>{minutes} min read</span>
+            <span>Guide · 19 Sep 2026</span>
+          </div>
+          <a class="text-link" href="#risk-index">
+            Explore the 10 issues ↓
+          </a>
+        </div>
+        <TopTenInfographic
+          slug="top-10-ai-security-issues"
+          title="10 AI security issues"
+        />
+      </div>
+    </header>
+    <section
+      class="risk-index shell"
+      id="risk-index"
+      aria-labelledby="index-title"
+    >
+      <div class="index-heading">
+        <p class="eyebrow">THE ISSUES AT A GLANCE</p>
+        <h2 id="index-title">Ten places to look closer.</h2>
+        <p>Select any issue to jump to its example and first actions.</p>
+      </div>
+      <ol class="risk-tiles">
+        {risks.map((risk, i) => (
+          <li>
+            <a href={`#${risk.id}`}>
+              <span class="tile-number">{String(i + 1).padStart(2, "0")}</span>
+              <span>{risk.short}</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </section>
+    <div class="article-layout shell">
+      <aside class="article-sidebar">
+        <nav aria-label="Article contents">
+          <p class="eyebrow">IN THIS GUIDE</p>
+          {risks.map((risk, i) => (
+            <a href={`#${risk.id}`}>
+              <span>{String(i + 1).padStart(2, "0")}</span>
+              {risk.short}
+            </a>
+          ))}
+          <a href="#first-week">Your first week</a>
+          <a href="#sources">Sources &amp; context</a>
+        </nav>
+      </aside>
+      <article class="article-body" aria-label="AI security guide">
+        <div class="article-intro">
+          <h2>Start with what AI can access.</h2>
+          <p>
+            A chatbot answering public questions and an agent updating customer
+            records have different risk profiles. Look at the data, identities,
+            connections, and decisions around each use case before choosing
+            controls.
+          </p>
+          <p>
+            This is Truva’s practical selection for teams using generative AI
+            and agents—not a statistical ranking or a reproduction of the OWASP
+            Top 10. The scenarios below are illustrative, not client incidents.
+            Prioritize according to your own exposure and business impact.
+          </p>
+        </div>
+        {risks.map((risk, i) => (
+          <section
+            class="risk-detail"
+            id={risk.id}
+            aria-labelledby={`${risk.id}-title`}
+          >
+            <div class="risk-heading">
+              <span class="risk-number">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <p class="eyebrow">{risk.tag}</p>
+                <h2 id={`${risk.id}-title`}>{risk.title}</h2>
+              </div>
+            </div>
+            <p>{risk.body}</p>
+            <div class="risk-example">
+              <span class="mini-label">WHAT IT CAN LOOK LIKE</span>
+              <p>{risk.example}</p>
+            </div>
+            <h3>Start here</h3>
+            <ul>
+              {risk.actions.map((action) => (
+                <li>{action}</li>
+              ))}
+            </ul>
+            <p class="risk-evidence">
+              <strong>Evidence to keep</strong>
+              {risk.evidence}
+            </p>
+            <a class="source-link" href={risk.source.url}>
+              Reference: {risk.source.name} ↗
+            </a>
+          </section>
+        ))}
+        <section class="first-week" id="first-week">
+          <p class="eyebrow">TURN THE LIST INTO ACTION</p>
+          <h2>Your first week: one workflow, end to end.</h2>
+          <p>
+            You do not need to review every system at once. Start with a
+            workflow that handles sensitive data or can change something
+            important.
+          </p>
+          <ol>
+            <li>
+              <strong>Map it.</strong> Identify the owner, data sources, model,
+              identity, and connected tools.
+            </li>
+            <li>
+              <strong>Challenge it.</strong> Test unauthorized access, malicious
+              inputs, and actions that should require approval.
+            </li>
+            <li>
+              <strong>Fix and prove it.</strong> Assign the highest-impact gaps,
+              retest the controls, and keep the evidence.
+            </li>
+          </ol>
+          <p>
+            These controls reduce risk; they do not make a model immune to
+            manipulation. Keep reassessing as capabilities change.
+          </p>
+        </section>
+        <section class="article-sources" id="sources">
+          <h2>Sources &amp; context</h2>
+          <p>
+            This article was inspired by{" "}
+            <a href="https://www.linkedin.com/feed/update/urn:li:activity:7497622721632337920/">
+              Brahma Gupta’s discussion of enterprise AI security risks
+            </a>
+            . The examples and action plan are original Truva editorial
+            guidance, informed by the primary references linked throughout.
+          </p>
+          <ul>
+            {Object.values(sources).map((source) => (
+              <li>
+                <a href={source.url}>{source.name} ↗</a>
+              </li>
+            ))}
+          </ul>
+          <p>
+            The OWASP LLM references use the 2025 edition; API references use
+            the 2023 edition. Framework dates identify the sources, not a new
+            2026 OWASP ranking. NIST’s framework is voluntary guidance, not a
+            certification.
+          </p>
+        </section>
+        <BlogCommunity />
+      </article>
+    </div>
+    <section class="article-cta shell">
+      <div>
+        <p class="eyebrow">MAKE THE NEXT STEP PRACTICAL</p>
+        <h2>
+          Which gaps matter
+          <br />
+          in your AI environment?
+        </h2>
+        <p>
+          Talk through your AI use cases, data flows, and agent permissions with
+          Truva.
+        </p>
+      </div>
+      <BookingLink label="Discuss an AI security assessment" />
+    </section>
+  </main>
+  <SiteFooter />
+</Base>
+<style>
+  .ai-article {
+    --article-pale: #f3f6fb;
+  }
+  .article-hero {
+    padding-block: 40px 72px;
+  }
+  .article-back {
+    font-size: 13px;
+    color: var(--color-muted);
+    display: inline-block;
+    margin-bottom: 40px;
+  }
+  .article-hero-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  h1 {
+    font-size: clamp(44px, 4.6vw, 66px);
+    line-height: 1.06;
+    letter-spacing: -0.05em;
+    margin-top: 20px;
+  }
+  h1 span {
+    color: var(--color-brand-blue);
+  }
+  .article-deck {
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin-top: 26px;
+  }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    font-size: 11px;
+    color: var(--color-muted);
+    margin: 25px 0 15px;
+  }
+  .risk-cover {
+    margin: 0;
+    background: var(--color-brand-blue);
+    color: white;
+    padding: 30px;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: #dce5f4;
+  }
+  .cover-question {
+    font-size: clamp(34px, 3.8vw, 52px);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    margin-top: 30px;
+  }
+  .cover-question em {
+    font-style: normal;
+    color: #ffa875;
+  }
+  .cover-map {
+    margin-top: 32px;
+    border-left: 1px solid #e77539;
+    padding-left: 18px;
+    display: grid;
+    gap: 13px;
+  }
+  .cover-map div {
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  }
+  .cover-map span {
+    color: #ffa875;
+    font-size: 10px;
+  }
+  .risk-cover figcaption {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid #ffffff33;
+    font-size: 11px;
+    color: #dce5f4;
+  }
+  .risk-index {
+    padding-block: 35px 50px;
+    border-block: 1px solid var(--color-line);
+  }
+  .index-heading h2 {
+    font-size: 30px;
+    margin: 10px 0;
+  }
+  .index-heading > p:last-child {
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+  .risk-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 30px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .risk-tiles a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 14px;
+    min-height: 58px;
+  }
+  .risk-tiles a:hover {
+    background: var(--article-pale);
+  }
+  .tile-number {
+    color: var(--color-brand-blue);
+    font-size: 12px;
+  }
+  .risk-tiles a > span:last-child {
+    margin-left: auto;
+    color: var(--color-brand-blue);
+  }
+  .article-layout {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 70px;
+    padding-block: 70px;
+  }
+  .article-sidebar nav {
+    position: sticky;
+    top: 120px;
+  }
+  .article-sidebar .eyebrow {
+    margin-bottom: 17px;
+  }
+  .article-sidebar a {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    padding: 8px 0;
+    color: var(--color-muted);
+  }
+  .article-sidebar a:hover {
+    color: var(--color-brand-blue);
+    text-decoration: underline;
+  }
+  .article-sidebar a span {
+    color: var(--color-brand-blue);
+    font-size: 10px;
+  }
+  .article-body {
+    max-width: 740px;
+    min-width: 0;
+  }
+  .article-body h2 {
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+  .article-body p {
+    line-height: 1.75;
+    margin-top: 16px;
+  }
+  .article-intro {
+    padding-bottom: 15px;
+  }
+  .article-intro p:last-child {
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+  .risk-detail {
+    padding: 45px 0;
+    border-bottom: 1px solid var(--color-line);
+    scroll-margin-top: 20px;
+  }
+  .risk-heading {
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+  }
+  .risk-number {
+    font-size: 38px;
+    line-height: 1.1;
+    color: var(--color-brand-blue);
+    letter-spacing: -0.04em;
+  }
+  .risk-heading .eyebrow {
+    margin: 0 0 9px;
+    color: var(--color-muted);
+    font-size: 10px;
+  }
+  .risk-example {
+    background: #fff6ef;
+    border-left: 3px solid var(--color-action);
+    padding: 19px 22px;
+    margin: 24px 0;
+  }
+  .mini-label {
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    font-weight: 700;
+  }
+  .risk-example p {
+    margin-top: 8px;
+    font-size: 15px;
+  }
+  .article-body h3 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-top: 24px;
+  }
+  .article-body ul,
+  .article-body ol {
+    padding-left: 22px;
+    margin: 12px 0;
+  }
+  .article-body ul {
+    list-style: disc;
+  }
+  .article-body ol {
+    list-style: decimal;
+  }
+  .article-body li {
+    padding-left: 5px;
+    margin-bottom: 10px;
+    line-height: 1.7;
+  }
+  .risk-evidence {
+    background: var(--article-pale);
+    padding: 17px 20px;
+    font-size: 14px;
+  }
+  .risk-evidence strong {
+    display: block;
+    color: var(--color-brand-blue);
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .source-link {
+    display: inline-block;
+    font-size: 11px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-top: 18px;
+  }
+  .first-week {
+    padding: 40px 0;
+  }
+  .first-week h2 {
+    margin-top: 14px;
+  }
+  .article-sources {
+    padding-top: 35px;
+    border-top: 1px solid var(--color-line);
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+  .article-sources h2 {
+    color: var(--color-ink);
+    font-size: 24px;
+  }
+  .article-sources a {
+    color: var(--color-brand-blue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+  .article-cta {
+    background: var(--article-pale);
+    border-radius: 12px;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 70px;
+  }
+  .article-cta h2 {
+    font-size: 34px;
+    margin: 15px 0;
+  }
+  .article-cta p:not(.eyebrow) {
+    max-width: 47ch;
+    font-size: 15px;
+    color: var(--color-muted);
+  }
+  .article-cta :global(.button) {
+    flex-shrink: 0;
+  }
+  @media (max-width: 1050px) {
+    .article-hero-grid {
+      gap: 30px;
+    }
+    .article-layout {
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 35px;
+    }
+    .article-cta {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .risk-cover {
+      padding: 24px;
+    }
+    .cover-map div {
+      font-size: 13px;
+    }
+  }
+  @media (max-width: 767px) {
+    .article-hero {
+      padding-top: 28px;
+      padding-bottom: 40px;
+    }
+    .article-back {
+      margin-bottom: 26px;
+    }
+    .article-hero-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    h1 {
+      font-size: 44px;
+    }
+    .article-deck {
+      font-size: 17px;
+    }
+    .risk-cover {
+      max-width: 480px;
+      width: 100%;
+      padding: 26px;
+    }
+    .cover-question {
+      font-size: 42px;
+    }
+    .risk-tiles {
+      grid-template-columns: 1fr;
+    }
+    .article-layout {
+      display: block;
+      padding-block: 40px;
+    }
+    .article-sidebar {
+      display: none;
+    }
+    .article-body h2 {
+      font-size: 26px;
+    }
+    .risk-heading {
+      gap: 14px;
+    }
+    .risk-number {
+      font-size: 30px;
+    }
+    .article-cta {
+      padding: 26px;
+    }
+    .article-cta h2 {
+      font-size: 30px;
+    }
+    .article-cta :global(.button) {
+      font-size: 12px;
+      max-width: 100%;
+    }
+    .risk-example {
+      padding: 16px;
+    }
+    .article-body {
+      font-size: 15px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      scroll-behavior: auto;
+    }
+  }
+  @media print {
+    .article-sidebar,
+    .article-cta,
+    .article-back {
+      display: none;
+    }
+    .article-layout,
+    .article-hero-grid {
+      display: block;
+    }
+    .risk-cover {
+      display: none;
+    }
+    .risk-detail {
+      break-inside: avoid;
+    }
+    .article-hero {
+      padding-block: 20px;
+    }
+  }
+</style>

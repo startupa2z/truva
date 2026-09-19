@@ -19,3 +19,11 @@ venv/
 # IDE
 .idea/
 .vscode/
+
+# Astro rebuild and local verification
+node_modules/
+dist/
+.astro/
+.firecrawl/
+marketing/artifacts/
+marketing/.local/

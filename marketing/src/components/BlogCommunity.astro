@@ -1,0 +1,215 @@
+<section class="blog-community" aria-labelledby="discussion-title">
+  <div class="discussion-heading">
+    <h2 id="discussion-title">Join the discussion</h2>
+    <span data-blog-views aria-live="polite">
+      Page views
+    </span>
+  </div>
+  <p>
+    What are you seeing in your AI or cloud environment? Share a question or a
+    practical lesson.
+  </p>
+  <p class="community-note">
+    Comments are reviewed before publication. Your display name and comment will
+    be public if approved. Please leave out confidential or personal
+    information.
+  </p>
+  <div id="approved-comments" aria-live="polite">
+    <p>Enable JavaScript to read and submit comments.</p>
+  </div>
+  <form id="comment-form" hidden>
+    <label for="comment-name">Display name</label>
+    <input
+      id="comment-name"
+      name="name"
+      required
+      minlength="2"
+      maxlength="60"
+      autocomplete="nickname"
+    />
+    <label for="comment-body">Comment</label>
+    <textarea
+      id="comment-body"
+      name="body"
+      required
+      minlength="10"
+      maxlength="2000"
+      rows="5"
+    ></textarea>
+    <div class="comment-trap" aria-hidden="true">
+      <label for="comment-website">Leave this blank</label>
+      <input
+        id="comment-website"
+        name="website"
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
+    <button type="submit" class="button">
+      Submit for review
+    </button>
+    <p id="comment-status" role="status"></p>
+  </form>
+  <noscript>
+    Comment submission needs JavaScript. You can still read the full article and
+    contact us at satish@truvasolutions.com.
+  </noscript>
+</section>
+<script>
+  const slug = location.pathname.replace(/\/$/, "");
+  const status = document.querySelector<HTMLElement>("#comment-status")!;
+  const form = document.querySelector<HTMLFormElement>("#comment-form")!;
+  form.hidden = false;
+  const list = document.querySelector<HTMLElement>("#approved-comments")!;
+  const views = document.querySelector<HTMLElement>("[data-blog-views]")!;
+  fetch(`/api/views?path=${encodeURIComponent(slug)}`)
+    .then((r) => {
+      if (!r.ok) throw Error();
+      return r.json();
+    })
+    .then(
+      (data) =>
+        (views.textContent = `${data.views.toLocaleString()} page views`),
+    )
+    .catch(() => (views.textContent = "View count unavailable"));
+  window.addEventListener("truva-view", ((event: CustomEvent) => {
+    views.textContent = `${event.detail.views.toLocaleString()} page views`;
+  }) as EventListener);
+  fetch(`/api/comments?slug=${encodeURIComponent(slug)}`)
+    .then((r) => {
+      if (!r.ok) throw Error();
+      return r.json();
+    })
+    .then((data) => {
+      list.replaceChildren();
+      if (!data.comments.length) {
+        const p = document.createElement("p");
+        p.textContent = "Be the first to start the conversation.";
+        list.append(p);
+      }
+      for (const item of data.comments) {
+        const article = document.createElement("article");
+        const name = document.createElement("strong");
+        name.textContent = item.name;
+        const time = document.createElement("time");
+        time.dateTime = item.created;
+        time.textContent = new Date(item.created).toLocaleDateString();
+        const body = document.createElement("p");
+        body.textContent = item.body;
+        article.append(name, time, body);
+        list.append(article);
+      }
+    })
+    .catch(
+      () =>
+        (list.textContent =
+          "Comments are temporarily unavailable. Please try again later."),
+    );
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = form.querySelector("button")!;
+    button.disabled = true;
+    status.textContent = "Submitting…";
+    try {
+      const fields = new FormData(form);
+      const response = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug,
+          name: fields.get("name"),
+          body: fields.get("body"),
+          website: fields.get("website"),
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw Error(data.error || "Could not submit.");
+      status.textContent = data.message;
+      form.reset();
+    } catch (error) {
+      status.textContent =
+        error instanceof Error
+          ? error.message
+          : "Could not submit. Please try again.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
+<style>
+  .blog-community {
+    margin-top: 48px;
+    padding-top: 36px;
+    border-top: 1px solid var(--color-line);
+  }
+  .discussion-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .discussion-heading span {
+    font-size: 12px;
+    color: var(--color-muted);
+  }
+  .community-note {
+    font-size: 12px;
+    color: var(--color-muted);
+  }
+  form[hidden] {
+    display: none;
+  }
+  form {
+    display: grid;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  input,
+  textarea {
+    width: 100%;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding: 12px;
+    font: inherit;
+    background: white;
+  }
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--color-brand-blue);
+    outline-offset: 2px;
+  }
+  button {
+    justify-self: start;
+    cursor: pointer;
+    border: 0;
+  }
+  button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+  .comment-trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  #approved-comments :global(article) {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  #approved-comments :global(time) {
+    margin-left: 12px;
+    font-size: 12px;
+    color: var(--color-muted);
+  }
+  #approved-comments :global(p) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+</style>

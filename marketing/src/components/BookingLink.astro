@@ -1,0 +1,24 @@
+---
+import { site } from "../data/site";
+import Arrow from "./Arrow.astro";
+interface Props {
+  label?: string;
+  light?: boolean;
+  small?: boolean;
+}
+const {
+  label = "Book a free 30-minute security consult",
+  light = false,
+  small = false,
+} = Astro.props;
+---
+
+<a
+  href={
+    site.bookingUrl || (Astro.url.pathname === "/" ? "#consult" : "/#consult")
+  }
+  class:list={["button", { "button-light": light, "button-small": small }]}
+>
+  {label}
+  <Arrow />
+</a>

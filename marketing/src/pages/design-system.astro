@@ -1,0 +1,164 @@
+---
+import Base from "../layouts/Base.astro";
+import Brand from "../components/Brand.astro";
+import BookingLink from "../components/BookingLink.astro";
+const colors = [
+  {
+    name: "White",
+    hex: "#FFFFFF",
+    role: "Page and section backgrounds",
+    className: "swatch-white",
+  },
+  {
+    name: "Logo orange",
+    hex: "#E77539",
+    role: "Buttons, closing CTA, and decorative accents",
+    className: "swatch-orange",
+  },
+  {
+    name: "Large-type logo orange",
+    hex: "#E67438",
+    role: "Large headings only · 3.03:1 on white",
+    className: "swatch-action",
+  },
+  {
+    name: "Logo blue",
+    hex: "#243A6C",
+    role: "Hero focal point, labels, and focus rings",
+    className: "swatch-blue",
+  },
+  {
+    name: "Text gray",
+    hex: "#292929",
+    role: "Headings and body text",
+    className: "swatch-ink",
+  },
+];
+---
+
+<Base
+  title="Design System & Phase 1 Review | Truva Solutions"
+  description="Local design review: Truva typography, sampled logo colors, components, assumptions, and the next phases."
+>
+  <main id="main" class="shell review-page">
+    <Brand />
+    <p class="review-status">LOCAL PREVIEW · PHASE 1 · NOT FOR PUBLICATION</p>
+    <h1>A quieter kind of confidence.</h1>
+    <p class="review-intro">
+      A minimal connected diagram places your product and processes at the
+      center, with thin orange lines to AI security, cloud security, and
+      compliance. Small blue labels and line icons sit on white.
+    </p>
+    <a class="text-link" href="/">
+      ← Back to the homepage
+    </a>
+    <section>
+      <h2>Colors from the real logo.</h2>
+      <p>
+        The supplied PNG has gradients, not flat brand colors. The three
+        chromatic colors below are exact opaque pixels sampled from{" "}
+        <code>truva-logo-fixed.png</code>. They are representative selections,
+        not a claim that a formal brand palette exists.
+      </p>
+      <div class="swatches">
+        {colors.map((color) => (
+          <div>
+            <div class:list={["swatch-color", color.className]}></div>
+            <strong>{color.name}</strong>
+            <p>{color.hex}</p>
+            <p class="placeholder-note">{color.role}</p>
+          </div>
+        ))}
+      </div>
+      <p class="review-intro">
+        Secondary text: #626262. Borders: #E1E1E1. The bright logo orange is
+        just under 3:1 on white. Buttons and the orange CTA band use dark text.
+        Large orange headings use the adjacent logo sample #E67438 (3.03:1).
+      </p>
+    </section>
+    <section>
+      <h2>Arial. Nothing extra to download.</h2>
+      <p>
+        Arial, Helvetica, sans-serif. Regular (400) and bold (700) only. Body
+        line-height 1.6; text width up to 65ch. Hierarchy comes from scale,
+        spacing, and weight.
+      </p>
+      <BookingLink />
+      <p class="review-intro">
+        Buttons have visible keyboard focus. The mobile navigation works without
+        JavaScript; a small script adds close-on-selection and Escape.
+        Reduced-motion preferences disable smooth scrolling.
+      </p>
+    </section>
+    <section>
+      <h2>Decisions for this first preview.</h2>
+      <ul>
+        <li>
+          <strong>Astro static + Tailwind.</strong> A separate marketing folder
+          preserves the current site and Python backend.
+        </li>
+        <li>
+          <strong>Positioning:</strong> startup security, AI, cloud, and
+          compliance. “25+ years” and senior delivery come from your brief; the
+          author bio and supporting credentials remain an input.
+        </li>
+        <li>
+          <strong>Services only:</strong> Products and the proposed Compass
+          concept have been removed. Home returns to the homepage; Services
+          opens a dropdown.
+        </li>
+        <li>
+          <strong>Booking:</strong> email requests to the existing public
+          business address until you provide a Calendly or Cal.com account URL.
+          No appointment is booked automatically.
+        </li>
+        <li>
+          <strong>Proof:</strong> TODO blocks instead of invented client logos,
+          results, or testimonials. Remove unfilled proof sections before
+          launch.
+        </li>
+        <li>
+          <strong>Process:</strong> “Prepare for audit” replaces “Certify” so
+          the site does not imply Truva issues SOC 2 reports or ISO
+          certifications.
+        </li>
+        <li>
+          <strong>Existing articles:</strong> cards link to their current public
+          URLs. No blog URL or production content has changed.
+        </li>
+        <li>
+          <strong>No personal details:</strong> business email and US service
+          area only.
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2>Review now. Build the rest next.</h2>
+      <ol>
+        <li>
+          <strong>Phase 1 — ready for review:</strong> homepage, visual system,
+          responsive navigation, metadata, logo derivatives, and OG card.
+        </li>
+        <li>
+          <strong>Phase 2 — after review:</strong> five service pages and
+          evidence-based keyword research. Volume, difficulty, and existing
+          rankings are not yet verified.
+        </li>
+        <li>
+          <strong>Phase 3:</strong> approved products, clients, about, blog
+          preservation, resources, and author profiles.
+        </li>
+        <li>
+          <strong>Phase 4:</strong> real booking and forms, server-validated
+          Turnstile, analytics, redirects, sitemap, full schema, security
+          headers, and launch verification.
+        </li>
+      </ol>
+      <p class="review-intro">
+        The preview is noindex. Local scores do not establish production Core
+        Web Vitals or search rankings. Cloudflare migration and backend routing
+        require a separate release review.
+      </p>
+    </section>
+  </main>
+</Base>

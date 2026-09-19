@@ -1,0 +1,14 @@
+{
+  "clients": [],
+  "proofMetrics": [],
+  "testimonials": [],
+  "todo": {
+    "clients": "[TODO: approved client names, logo files, and permission to publish]",
+    "metrics": [
+      "[TODO: verified readiness timeline]",
+      "[TODO: verified risks remediated]",
+      "[TODO: verified customer outcome]"
+    ],
+    "testimonials": "[TODO: approved quote, attribution, and permission to publish]"
+  }
+}
