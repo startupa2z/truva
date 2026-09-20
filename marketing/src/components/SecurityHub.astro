@@ -1,4 +1,6 @@
 ---
+import HubIntelligence from "./HubIntelligence.astro";
+import TopIssues from "./TopIssues.astro";
 import { site } from "../data/site";
 import Base from "../layouts/Base.astro";
 import SiteHeader from "./SiteHeader.astro";
@@ -34,6 +36,7 @@ const topics = [
   },
 ];
 const guides = insights.filter((p) => p.local);
+const collection = {"@context":"https://schema.org","@type":"CollectionPage",name:"Truva Security Hub",url:"https://truvasolutions.com/security-hub",isPartOf:{"@id":"https://truvasolutions.com/#website"},hasPart:guides.map(g=>({"@type":"WebPage",name:g.title,url:new URL(g.url,site.url).href}))};
 ---
 
 <Base
@@ -41,27 +44,20 @@ const guides = insights.filter((p) => p.local);
   title="Security Hub | AI, Cloud & Compliance | Truva Solutions"
   description="Explore Truva Solutions’ practical AI security, cloud security and compliance guides, visual checklists, and trusted primary sources."
 >
-  <SiteHeader />
+  <script type="application/ld+json" set:html={JSON.stringify(collection).replace(/</g,"\\u003c")} />
+  <SiteHeader showBooking={false} pageTitle="Security Hub" />
   <main id="main" class="hub shell">
-    <header class="hub-heading">
-      <div>
-        <p class="eyebrow">TRUVA SOLUTIONS / SECURITY HUB</p>
-        <h1>Security, made clearer.</h1>
-        <p>Understand what matters. Find your next step.</p>
-      </div>
-      <a class="hub-consult" href={site.bookingUrl || "/#consult"}>
-        Talk to a practitioner ↗
-      </a>
-    </header>
     <div class="hub-layout">
       <aside class="hub-sidebar">
         <p class="eyebrow">YOUR SECURITY LIBRARY</p>
         <nav aria-label="Security Hub">
-          <a href="#overview">Overview</a>
-          <a href="#library">Guides & infographics</a>
-          <a href="#compliance">Compliance essentials</a>
-          <a href="#trusted">Trusted sources</a>
-          <a href="/resources/blogs">All blogs</a>
+          <a href="#top-issues-title">Top issues</a>
+          <a href="#priority-signals">Priority signals</a>
+          <a href="#source-health">Source health</a>
+          <a href="#ai-security">AI security</a>
+          <a href="#cloud-tools">Cloud posture</a>
+          <a href="#compliance">Compliance actions</a>
+          <a href="#library">Guides</a>
         </nav>
         <div class="sidebar-note">
           <img src="/images/truva-mark.webp" width="25" height="28" alt="" />
@@ -70,6 +66,8 @@ const guides = insights.filter((p) => p.local);
         </div>
       </aside>
       <div class="hub-content">
+        <TopIssues />
+        <HubIntelligence />
         <section id="overview" aria-labelledby="topics-title">
           <div class="section-label">
             <h2 id="topics-title">Explore your focus area</h2>
@@ -109,7 +107,7 @@ const guides = insights.filter((p) => p.local);
         <section id="library" aria-labelledby="library-title">
           <div class="section-label">
             <h2 id="library-title">Guides & infographics</h2>
-            <a href="/resources/blogs">Browse blogs →</a>
+            <a href="/security-hub/guides">Browse all guides →</a>
           </div>
           <div class="library-tools" hidden>
             <div
@@ -278,6 +276,12 @@ const guides = insights.filter((p) => p.local);
               The OWASP-based LLM adaptation is shared under CC BY-SA 4.0.
             </small>
           </div>
+          <a
+            class="button practitioner-link"
+            href={site.bookingUrl || "/#consult"}
+          >
+            Talk to a security practitioner
+          </a>
           <button class="button" id="copy-hub" hidden>
             Copy hub link
           </button>
@@ -360,7 +364,7 @@ const guides = insights.filter((p) => p.local);
 </script>
 <style>
   .hub {
-    padding-block: 38px 70px;
+    padding-block: 16px 48px;
   }
   .hub-heading {
     display: flex;
@@ -377,15 +381,14 @@ const guides = insights.filter((p) => p.local);
     color: var(--color-muted);
     font-size: 17px;
   }
-  .hub-consult {
-    font-size: 13px;
-    font-weight: 700;
+  .hub-primary,
+  .practitioner-link {
     white-space: nowrap;
   }
   .hub-layout {
     display: grid;
     grid-template-columns: 200px minmax(0, 1fr);
-    gap: 30px;
+    gap: 20px;
   }
   .hub-sidebar {
     border-right: 1px solid var(--color-line);
@@ -394,7 +397,7 @@ const guides = insights.filter((p) => p.local);
   .hub-sidebar nav {
     display: grid;
     gap: 5px;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .hub-sidebar nav a {
     font-size: 13px;
@@ -424,7 +427,8 @@ const guides = insights.filter((p) => p.local);
   .hub-content {
     min-width: 0;
     display: grid;
-    gap: 30px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
   }
   .section-label {
     display: flex;
@@ -731,13 +735,16 @@ const guides = insights.filter((p) => p.local);
   }
   @media (max-width: 767px) {
     .hub {
-      padding-top: 28px;
+      padding-top: 12px;
     }
     .hub-heading {
       display: block;
     }
-    .hub-consult {
-      display: inline-block;
+    .hub-sidebar {
+      display: none;
+    }
+    .hub-primary {
+      display: inline-flex;
       margin-top: 16px;
     }
     .hub-heading h1 {

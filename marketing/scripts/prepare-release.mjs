@@ -13,9 +13,9 @@ for(const file of readdirSync('../frontend/blog')) {
 function walk(dir){for(const entry of readdirSync(dir,{withFileTypes:true})){const p=join(dir,entry.name);if(entry.isDirectory())walk(p);else if(entry.name.endsWith('.html'))writeFileSync(p,readFileSync(p,'utf8').replaceAll('service@truvasolutions.com','satish@truvasolutions.com'));}}
 walk('dist');
 rmSync('dist/design-system',{recursive:true,force:true});
-rmSync('dist/_headers',{force:true});rmSync('dist/_redirects',{force:true});
+rmSync('dist/_headers',{force:true});
 writeFileSync('dist/robots.txt','User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: https://truvasolutions.com/sitemap.xml\n');
-const urls=['/','/services','/security-hub','/resources/blogs','/resources/white-papers','/resources/case-studies','/privacy'];
+const urls=['/','/services','/security-hub','/security-hub/guides','/privacy'];
 for(const f of readdirSync('dist/blog'))urls.push('/blog/'+f);
 writeFileSync('dist/sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+urls.map(p=>'<url><loc>https://truvasolutions.com'+p+'</loc></url>').join('')+'</urlset>');
 console.log('Preserved legacy articles; production robots and sitemap prepared.');

@@ -27,3 +27,11 @@ dist/
 .firecrawl/
 marketing/artifacts/
 marketing/.local/
+
+# Isolated local preview caches and dependency link
+marketing/.cache/
+marketing/node_modules
+
+# Rejected local hero exploration retained only for comparison
+marketing/public/images/truva-security-hero-*.webp
+marketing/review/

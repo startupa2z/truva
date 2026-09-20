@@ -57,18 +57,19 @@ const steps = [
         <SecurityIllustration />
       </div>
     </section>
-    {site.preview && (
-    <section
-      id="clients"
-      class="client-strip section-border"
-      aria-label="Client proof awaiting approval"
-    >
-      <div class="shell client-strip-inner">
-        <span class="eyebrow">GOOD WORK. SHARED WITH PERMISSION.</span>
-        <p class="placeholder-note">{clients.todo.clients}</p>
+    <section class="logo-preview section-border" aria-label="Tools and frameworks">
+      <div class="shell">
+          <div class="logo-preview-heading"><span class="eyebrow">TOOLS &amp; FRAMEWORKS</span><span>Independent technology and standards coverage</span></div>
+          <div class="logo-preview-grid">
+            <div class="tool-logo"><img src="/images/tools/wiz.svg" alt="Wiz" width="90" height="42" /><span>Cloud security</span></div>
+            <div class="tool-logo"><img src="/images/tools/prowler.png" alt="Prowler" width="132" height="42" /><span>Cloud assessment</span></div>
+            <div class="tool-logo"><img src="/images/tools/orca.svg" alt="Orca Security" width="140" height="42" /><span>Cloud security</span></div>
+            <div class="framework-mark"><strong>SOC 2</strong><span>Trust services</span></div>
+            <div class="framework-mark"><strong>ISO 27001</strong><span>Information security</span></div>
+            <div class="framework-mark"><strong>ISO 42001</strong><span>AI management</span></div>
+          </div>
       </div>
     </section>
-    )}
     <CompanySections />
     <section
       id="approach"
@@ -212,3 +213,30 @@ const steps = [
   </main>
   <SiteFooter />
 </Base>
+
+<style>
+  .hero h1 { font-size: clamp(32px, 3.5vw, 44px); line-height: 1.2; letter-spacing: -.035em; }
+  .hero .eyebrow { margin-bottom: 32px; }
+  .hero-description { margin-top: 32px; max-width: 46ch; }
+  .hero { column-gap: 40px; }
+  @media (max-width: 767px) {
+    .hero h1 { font-size: 32px; }
+    .hero .eyebrow { margin-bottom: 24px; }
+    .hero-description { margin-top: 24px; }
+  }
+</style>
+
+<style>
+.logo-preview { padding-block: 24px 28px; }
+.logo-preview-heading { display:flex; justify-content:space-between; gap:16px; align-items:center; }
+.logo-preview-heading > span:last-child { font-size:11px; color:var(--color-muted); }
+.logo-preview-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:16px; align-items:center; margin-top:24px; }
+.tool-logo, .framework-mark { display:grid; grid-template-rows:40px 16px; gap:6px; justify-items:center; align-items:center; min-width:0; text-align:center; color:var(--color-brand-blue); }
+.tool-logo img { display:block; object-fit:contain; filter:brightness(0) saturate(100%); max-width:100%; }
+.tool-logo img[alt="Wiz"] { width:64px; height:29px; }
+.tool-logo img[alt="Prowler"] { width:124px; height:34px; }
+.tool-logo img[alt="Orca Security"] { width:84px; height:32px; }
+.framework-mark strong { font-size:20px; line-height:1; letter-spacing:-.04em; white-space:nowrap; }
+.tool-logo span, .framework-mark span { display:block; font-size:10px; line-height:16px; color:var(--color-muted); margin:0; white-space:nowrap; }
+@media(max-width:767px) { .logo-preview-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px 12px; } .logo-preview-heading { display:block; } .logo-preview-heading > span:last-child { display:block; margin-top:6px; } .framework-mark strong { font-size:17px; } }
+</style>

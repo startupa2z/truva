@@ -1,2 +1,4 @@
-# Phase 1 preview only. Existing URLs have not been migrated or removed.
-# Add evidence-backed 301 mappings in phase 4; never redirect all missing pages to /.
+/resources /security-hub 301
+/resources/blogs /security-hub/guides 301
+/resources/white-papers /security-hub 301
+/resources/case-studies /security-hub 301

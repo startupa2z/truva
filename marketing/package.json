@@ -16,7 +16,9 @@
     "assets": "node scripts/assets.mjs",
     "format": "prettier --plugin=prettier-plugin-astro --write \"src/**/*.{astro,css,ts,json}\" \"scripts/*.mjs\"",
     "preview:static": "ASTRO_TELEMETRY_DISABLED=1 astro preview --host 127.0.0.1 --port 4321",
-    "test:community": "node --test server/community.test.mjs"
+    "test:community": "node --test server/community.test.mjs",
+    "refresh:security": "node scripts/security-feed.mjs",
+    "test:security": "node --test scripts/security-feed*.test.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "4.3.3",

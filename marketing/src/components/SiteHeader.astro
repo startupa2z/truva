@@ -4,12 +4,19 @@ import AboutMenu from "./AboutMenu.astro";
 import Brand from "./Brand.astro";
 import BookingLink from "./BookingLink.astro";
 import ServicesMenu from "./ServicesMenu.astro";
-import ResourcesMenu from "./ResourcesMenu.astro";
+
+interface Props {
+  showBooking?: boolean;
+  pageTitle?: string;
+}
+
+const { showBooking = true, pageTitle } = Astro.props;
 ---
 
-<header class="site-header">
+<header class:list={["site-header", { "compact-page-header": pageTitle }]}>
   <div class="shell header-inner">
     <Brand />
+    {pageTitle && <h1 class="header-page-title">{pageTitle}</h1>}
     <nav class="desktop-nav" aria-label="Main navigation">
       <a
         href="/"
@@ -17,11 +24,16 @@ import ResourcesMenu from "./ResourcesMenu.astro";
       >
         Home
       </a>
+      <a
+        href="/security-hub"
+        aria-current={Astro.url.pathname.startsWith("/security-hub") ? "page" : undefined}
+      >
+        Security Hub
+      </a>
       <ServicesMenu />
       <AboutMenu />
-      <ResourcesMenu />
     </nav>
-    <BookingLink label="Book a consult" small />
+    {showBooking && <BookingLink label="Book a consult" small />}
     <details class="mobile-nav">
       <summary aria-label="Navigation menu">
         <span></span>
@@ -34,10 +46,15 @@ import ResourcesMenu from "./ResourcesMenu.astro";
         >
           Home
         </a>
+        <a
+          href="/security-hub"
+          aria-current={Astro.url.pathname.startsWith("/security-hub") ? "page" : undefined}
+        >
+          Security Hub
+        </a>
         <ServicesMenu />
         <AboutMenu />
-        <ResourcesMenu />
-        <a href={site.bookingUrl || "/#consult"}>Book a consult</a>
+          {showBooking && <a href={site.bookingUrl || "/#consult"}>Book a consult</a>}
       </nav>
     </details>
   </div>
@@ -80,3 +97,13 @@ import ResourcesMenu from "./ResourcesMenu.astro";
     }
   });
 </script>
+
+<style>
+  .compact-page-header .header-inner { height: 64px; gap: 24px; }
+  .header-page-title { font-size: 22px; line-height: 1.2; margin: 0 auto 0 0; white-space: nowrap; }
+  @media (max-width: 767px) {
+    .compact-page-header .header-inner { height: 60px; gap: 12px; }
+    .header-page-title { font-size: 18px; }
+    .compact-page-header :global(.brand-name) { display: none; }
+  }
+</style>

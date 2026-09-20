@@ -1,0 +1,51 @@
+---
+import Base from "../../../layouts/Base.astro";
+import SiteHeader from "../../../components/SiteHeader.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+import { topIssues } from "../../../data/top-issues";
+
+export function getStaticPaths() {
+  return topIssues.map((issue) => ({ params: { slug: issue.slug }, props: { issue } }));
+}
+
+const { issue } = Astro.props;
+---
+
+<Base
+  canonicalPath={`/security-hub/issues/${issue.slug}`}
+  title={`${issue.title} | Security Hub | Truva Solutions`}
+  description={issue.whatItIs}
+>
+  <SiteHeader />
+  <main id="main" class="issue-page shell">
+    <a class="back-link" href="/security-hub">← Security Hub</a>
+    <header>
+      <p class="eyebrow">{issue.category.toUpperCase()} / TOP ISSUE</p>
+      <h1>{issue.title}</h1>
+      <p class="updated">Last updated: <time datetime={issue.lastUpdated}>{issue.lastUpdated}</time></p>
+    </header>
+    <article class="issue-content">
+      <section><h2>What it is</h2><p>{issue.whatItIs}</p></section>
+      <section><h2>Why it matters</h2><p>{issue.whyItMatters}</p></section>
+      <section><h2>Who or what is affected</h2><p>{issue.affected}</p></section>
+      <section class="check-now"><h2>What to check now</h2><p>{issue.checkNow}</p></section>
+      <section><h2>Remediation guidance</h2><p>{issue.remediation}</p></section>
+      <p class="source"><a href={issue.source.url}>Primary source: {issue.source.name} ↗</a></p>
+    </article>
+  </main>
+  <SiteFooter />
+</Base>
+
+<style>
+  .issue-page { max-width: 900px; padding-block: 38px 70px; }
+  .back-link, .source a { color: #243a6c; font-size: 13px; font-weight: 700; }
+  header { margin: 32px 0 40px; }
+  h1 { font-size: clamp(38px, 5vw, 60px); line-height: 1.08; margin: 13px 0; }
+  .updated { color: #526077; font-size: 12px; }
+  .issue-content { display: grid; gap: 0; max-width: 700px; }
+  .issue-content section { border-top: 1px solid #dbe1ea; padding: 25px 0; }
+  .issue-content h2 { font-size: 22px; }
+  .issue-content p { color: #526077; line-height: 1.7; margin-top: 10px; }
+  .check-now { background: #fff6ef; border: 0 !important; border-left: 3px solid #e77539 !important; padding: 22px !important; }
+  .source { margin-top: 10px; }
+</style>

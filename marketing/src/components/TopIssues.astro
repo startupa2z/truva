@@ -1,0 +1,104 @@
+---
+import { issueCategories, topIssues } from "../data/top-issues";
+const grouped = Object.fromEntries(
+  issueCategories.map((category) => [
+    category.id,
+    topIssues.filter((issue) => issue.category === category.id),
+  ]),
+);
+---
+
+<section class="top-issues" aria-labelledby="top-issues-title">
+  <div class="top-issues-heading">
+    <div>
+      <p class="eyebrow">PRACTICAL SECURITY PRIORITIES</p>
+      <h2 id="top-issues-title">Top issues to review first</h2>
+    </div>
+    <p>Choose a discipline, identify the risk, and start with a concrete check.</p>
+  </div>
+  <div class="issue-tabs" role="tablist" aria-label="Top issue categories">
+    {issueCategories.map((category, index) => (
+      <button
+        type="button"
+        role="tab"
+        id={`issue-tab-${category.id}`}
+        aria-controls={`issue-panel-${category.id}`}
+        aria-selected={index === 0 ? "true" : "false"}
+        tabindex={index === 0 ? 0 : -1}
+        data-issue-tab={category.id}
+      >
+        {category.label}
+      </button>
+    ))}
+  </div>
+  {issueCategories.map((category, index) => (
+    <div
+      id={`issue-panel-${category.id}`}
+      role="tabpanel"
+      aria-labelledby={`issue-tab-${category.id}`}
+      hidden={index !== 0}
+      data-issue-panel={category.id}
+    >
+      <p class="issue-category-description">{category.description}</p>
+      {grouped[category.id].length > 0 ? (
+        <ol class="issue-list">
+          {grouped[category.id].map((issue, issueIndex) => (
+            <li>
+              <a href={`/security-hub/issues/${issue.slug}`}>
+                <span>{String(issueIndex + 1).padStart(2, "0")}</span>
+                <strong>{issue.title}</strong>
+                <span aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="issue-empty" role="status">
+          Verified issue entries are being prepared from primary sources.
+        </p>
+      )}
+    </div>
+  ))}
+</section>
+
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>("[data-issue-tab]")];
+  const panels = [...document.querySelectorAll<HTMLElement>("[data-issue-panel]")];
+  function select(id: string) {
+    tabs.forEach((tab) => {
+      const selected = tab.dataset.issueTab === id;
+      tab.setAttribute("aria-selected", String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => (panel.hidden = panel.dataset.issuePanel !== id));
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => select(tab.dataset.issueTab!));
+    tab.addEventListener("keydown", (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].focus();
+      select(tabs[next].dataset.issueTab!);
+    });
+  });
+</script>
+
+<style>
+  .top-issues { border: 1px solid #dbe1ea; border-top: 3px solid #243a6c; border-radius: 10px; background: #fff; padding: 22px; }
+  .top-issues-heading { display: flex; justify-content: space-between; gap: 24px; align-items: start; }
+  .top-issues h2 { font-size: 27px; line-height: 1.2; margin-top: 8px; }
+  .top-issues-heading > p { color: #526077; font-size: 13px; line-height: 1.55; max-width: 35ch; }
+  .issue-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 12px; }
+  .issue-tabs button { background: #fff; border: 1px solid #ccd5e3; border-radius: 6px; color: #243a6c; cursor: pointer; font-size: 13px; font-weight: 700; min-height: 44px; padding: 10px 13px; }
+  .issue-tabs button[aria-selected="true"] { background: #243a6c; border-color: #243a6c; color: #fff; }
+  .issue-category-description { color: #526077; font-size: 12px; margin: 16px 0 10px; }
+  .issue-list { display: grid; gap: 0; list-style: none; margin: 0; padding: 0; }
+  .issue-list li { border-top: 1px solid #e7ebf1; }
+  .issue-list a { align-items: center; color: inherit; display: grid; gap: 12px; grid-template-columns: 34px minmax(0, 1fr) auto; min-height: 48px; padding: 10px 0; }
+  .issue-list a > span:first-child { color: #526077; font-size: 11px; font-weight: 700; }
+  .issue-list strong { font-size: 14px; }
+  .issue-empty { background: #f7f9fc; color: #526077; font-size: 13px; margin-top: 14px; padding: 16px; }
+  .top-issues :is(button, a):focus-visible { outline: 2px solid #243a6c; outline-offset: 3px; }
+  @media (max-width: 767px) { .top-issues { padding: 18px; } .top-issues-heading { display: block; } .top-issues-heading > p { margin-top: 12px; } }
+</style>

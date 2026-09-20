@@ -41,7 +41,7 @@ export function createCommunityServer({root,dbPath,adminToken,origin='http://127
     const url=new URL(req.url,origin);const path=url.pathname;
     res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');
     if(path==='/health'&&req.method==='GET'){db.prepare('SELECT 1').get();return json(res,200,{status:'ok',commit:process.env.RELEASE_COMMIT||'local'});}
-    if(['/resources','/resources/','/blog.html'].includes(path)){res.writeHead(301,{Location:path==='/blog.html'?'/resources/blogs':'/security-hub'});return res.end();}
+    if(['/resources','/resources/','/resources/blogs','/resources/blogs/','/resources/white-papers','/resources/white-papers/','/resources/case-studies','/resources/case-studies/','/blog.html'].includes(path)){res.writeHead(301,{Location:path==='/blog.html'||path.startsWith('/resources/blogs')?'/security-hub/guides':'/security-hub'});return res.end();}
     if(process.env.NODE_ENV==='production'&&path.startsWith('/design-system'))fail('Not found.',404);
     if(path.startsWith('/api/')) {
       if(req.method==='POST'||req.method==='PATCH'){

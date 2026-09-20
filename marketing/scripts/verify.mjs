@@ -76,12 +76,8 @@ try {
     assert.equal(await page.locator(":focus").innerText(), "Skip to content");
     const nav = width < 768 ? ".mobile-nav" : ".desktop-nav";
     if (width < 768) await page.locator(".mobile-nav > summary").click();
-    await page
-      .locator(`${nav} .services-menu > summary`)
-      .filter({ hasText: "Security Hub" })
-      .click();
-    await page.locator(`${nav} a[href="/resources/blogs"]`).click();
-    assert.match(new URL(page.url()).pathname, /resources\/blogs/);
+    await page.locator(`${nav} a[href="/security-hub"]`).click();
+    assert.equal(new URL(page.url()).pathname, "/security-hub");
     if (width < 768) await page.locator(".mobile-nav > summary").click();
     await page
       .locator(`${nav} .services-menu > summary`)
@@ -150,10 +146,8 @@ try {
     const page = await routeContext.newPage();
     for (const route of [
       "services",
-      "resources",
-      "resources/blogs",
-      "resources/white-papers",
-      "resources/case-studies",
+      "security-hub",
+      "security-hub/guides",
     ]) {
       const response = await page.goto(`${base}/${route}`, {
         waitUntil: "networkidle",
