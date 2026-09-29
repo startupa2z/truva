@@ -1,5 +1,6 @@
 import {cpSync,readdirSync,writeFileSync,rmSync,readFileSync,statSync} from 'node:fs';
 import {join} from 'node:path';
+import {robotsTxt} from './crawler-policy.mjs';
 const tracker=readFileSync('dist/index.html','utf8').match(/<script[^>]*>[^<]*truva-visitor[^<]*<\/script>/)?.[0];
 if(!tracker)throw Error('Analytics tracker missing from release.');
 // Preserve existing published article URLs and their assets, without replacing rebuilt guides.
@@ -14,7 +15,7 @@ function walk(dir){for(const entry of readdirSync(dir,{withFileTypes:true})){con
 walk('dist');
 rmSync('dist/design-system',{recursive:true,force:true});
 rmSync('dist/_headers',{force:true});
-writeFileSync('dist/robots.txt','User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: https://truvasolutions.com/sitemap.xml\n');
+writeFileSync('dist/robots.txt',robotsTxt);
 const urls=['/','/services','/security-hub','/security-hub/guides','/privacy'];
 for(const f of readdirSync('dist/blog'))urls.push('/blog/'+f);
 writeFileSync('dist/sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+urls.map(p=>'<url><loc>https://truvasolutions.com'+p+'</loc></url>').join('')+'</urlset>');
