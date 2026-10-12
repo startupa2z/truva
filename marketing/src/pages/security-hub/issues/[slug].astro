@@ -18,7 +18,7 @@ const { issue } = Astro.props;
 >
   <SiteHeader />
   <main id="main" class="issue-page shell">
-    <a class="back-link" href="/security-hub">← Security Hub</a>
+    <a class="back-link" href="/security-hub">Security Hub</a>
     <header>
       <p class="eyebrow">{issue.category.toUpperCase()} / TOP ISSUE</p>
       <h1>{issue.title}</h1>
@@ -30,7 +30,7 @@ const { issue } = Astro.props;
       <section><h2>Who or what is affected</h2><p>{issue.affected}</p></section>
       <section class="check-now"><h2>What to check now</h2><p>{issue.checkNow}</p></section>
       <section><h2>Remediation guidance</h2><p>{issue.remediation}</p></section>
-      <p class="source"><a href={issue.source.url}>Primary source: {issue.source.name} ↗</a></p>
+      <p class="source"><a href={issue.source.url}>Primary source: {issue.source.name}</a></p>
     </article>
   </main>
   <SiteFooter />

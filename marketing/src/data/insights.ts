@@ -2,6 +2,14 @@
 // Ordering is editorial, not a claim about publication dates.
 export const insights = [
   {
+    category: "FOUNDER PERSPECTIVES",
+    title: "SF Tech Week 2026: lessons and session recaps",
+    description: "Satish’s reflections on AI, security, customers and startup finance, with individual session recaps.",
+    url: "/blog/sf-tech-week-2026",
+    local: true,
+    mark: "SF",
+  },
+  {
     category: "CLOUD SECURITY",
     title: "Top 10 CSPM issues to check in your cloud",
     description:

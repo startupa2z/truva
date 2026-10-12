@@ -70,7 +70,6 @@ const differences = [
         <span class="row-number">0{i + 1}</span>
         <h3>{o.title}</h3>
         <p>{o.text}</p>
-        <span aria-hidden="true">↗</span>
       </a>
     ))}
   </div>
@@ -172,7 +171,7 @@ const differences = [
   }
   .offering-list > a {
     display: grid;
-    grid-template-columns: 45px 1fr 1.4fr 25px;
+    grid-template-columns: 45px 1fr 1.4fr;
     gap: 24px;
     align-items: center;
     padding: 26px 0;
@@ -272,17 +271,13 @@ const differences = [
       padding-block: 48px;
     }
     .offering-list > a {
-      grid-template-columns: 25px 1fr 20px;
+      grid-template-columns: 25px 1fr;
       gap: 12px;
       padding: 22px 0;
     }
     .offering-list p {
       grid-column: 2;
       grid-row: 2;
-    }
-    .offering-list > a > span:last-child {
-      grid-column: 3;
-      grid-row: 1;
     }
     .audience-layout,
     .about-layout,

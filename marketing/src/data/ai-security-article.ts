@@ -29,7 +29,7 @@ export const sources = {
   },
   governance: {
     name: "NIST Generative AI Profile (AI 600-1)",
-    url: "https://doi.org/10.6028/NIST.AI.600-1",
+    url: "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence",
   },
 };
 export const risks = [

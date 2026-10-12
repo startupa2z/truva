@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 import { insights } from "../../data/insights";
+import { hubPath } from "../../data/sf-tech-week";
 import { site } from "../../data/site";
 const title = "Security guides";
 const description = "Practical AI security, cloud security and compliance guidance from Truva.";
@@ -22,7 +23,7 @@ const description = "Practical AI security, cloud security and compliance guidan
       <p class="resource-intro">{description}</p>
     </header>
       <div class="insights-grid resource-links grid md:grid-cols-3">
-        {insights.map((post) => (
+        {insights.filter((post) => post.url !== hubPath).map((post) => (
           <article class="insight-card">
             <a href={post.local ? post.url : `${site.url}${post.url}`}>
               {post.infographic && (
@@ -38,7 +39,7 @@ const description = "Practical AI security, cloud security and compliance guidan
               <span class="eyebrow">{post.category}</span>
               <h2>{post.title}</h2>
               <p>{post.description}</p>
-              <span class="read-label">Read the article →</span>
+              <span class="read-label">Read the article</span>
             </a>
           </article>
         ))}

@@ -2,7 +2,6 @@
 import CompanySections from "../components/CompanySections.astro";
 import Base from "../layouts/Base.astro";
 import BookingLink from "../components/BookingLink.astro";
-import Arrow from "../components/Arrow.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SecurityIllustration from "../components/SecurityIllustration.astro";
@@ -151,7 +150,6 @@ const steps = [
         </div>
         <a class="text-link" href="/security-hub">
           Explore the Security Hub
-          <Arrow />
         </a>
       </div>
       <div class="insights-grid grid md:grid-cols-3">
@@ -160,7 +158,6 @@ const steps = [
             <a href={post.local ? post.url : `${site.url}${post.url}`}>
               <div class="insight-top">
                 <span class="eyebrow">{post.category}</span>
-                <Arrow diagonal />
               </div>
               <h3>{post.title}</h3>
               <p>{post.description}</p>
@@ -203,7 +200,6 @@ const steps = [
           href={`mailto:${site.email}?subject=${encodeURIComponent("Free 30-minute security consult")}`}
         >
           {site.email}
-          <Arrow diagonal />
         </a>
         <p class="booking-note">
           30 minutes · Google Meet · Select a time on Calendly

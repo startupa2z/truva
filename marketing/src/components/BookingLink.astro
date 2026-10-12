@@ -1,6 +1,5 @@
 ---
 import { site } from "../data/site";
-import Arrow from "./Arrow.astro";
 interface Props {
   label?: string;
   light?: boolean;
@@ -20,5 +19,4 @@ const {
   class:list={["button", { "button-light": light, "button-small": small }]}
 >
   {label}
-  <Arrow />
 </a>

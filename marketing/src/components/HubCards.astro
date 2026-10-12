@@ -1,0 +1,36 @@
+---
+import { risks } from "../data/ai-security-article";
+const attentionChecks = [
+  { id: "prompt-injection", audience: "Assistants reading websites, email, or uploaded files", impact: "Instructions hidden in external content can redirect an assistant or trigger unintended actions." },
+  { id: "retrieval", audience: "AI connected to internal documents", impact: "An assistant can expose restricted information if retrieval ignores the user’s document permissions." },
+  { id: "permissions", audience: "Agents that use tools or change business records", impact: "Unnecessary tool permissions can turn a small mistake into a consequential change." },
+].map((check) => ({ ...check, risk: risks.find((risk) => risk.id === check.id)! }));
+---
+<section id="ai-security-checks" class="attention-section" aria-label="Practical AI security checks">
+  <div class="attention-grid">
+    {attentionChecks.map(({ audience, impact, risk }) => (
+      <article class="attention-card">
+        <h3>{risk.short}</h3>
+        <p class="attention-audience"><strong>Relevant if you use</strong> {audience}.</p>
+        <p><strong>Why it matters</strong> {impact}</p>
+        <p class="attention-action"><strong>First check</strong> {risk.actions[0]}</p>
+        <div class="attention-links">
+          <a href={`/blog/top-10-ai-security-risks-2026.html#${risk.id}`}>Checks &amp; examples</a>
+          <a href={risk.source.url}>OWASP reference</a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+.attention-section{scroll-margin-top:100px}
+.attention-grid{display:grid;gap:14px}
+.attention-card{background:#fff6ef;border:1px solid #f1daca;border-radius:10px;padding:16px;display:grid;gap:10px;min-width:0}
+.attention-card h3{font-size:16px;line-height:1.3;color:#243a6c}
+.attention-card p{font-size:12px;line-height:1.55;color:#665a52}
+.attention-card p strong{display:block;color:#42392f;font-size:11px;margin-bottom:3px}
+.attention-links{display:flex;flex-wrap:wrap;gap:0 14px}
+.attention-links a{display:inline-flex;align-items:center;min-height:44px;font-size:12px;font-weight:700;color:#243a6c}
+@media(min-width:768px) and (max-width:1100px){.attention-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>

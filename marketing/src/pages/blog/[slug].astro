@@ -22,7 +22,7 @@ const { article } = Astro.props;
   <SiteHeader />
   <main id="main" class="series-page shell">
     <a class="text-link" href="/security-hub/guides">
-      ← Security Hub guides
+      Security Hub guides
     </a>
     <header class="series-hero">
       <div>
@@ -31,7 +31,7 @@ const { article } = Astro.props;
         <p class="series-lead">{article.description}</p>
         <p class="series-meta">Truva Solutions · Guide · 19 Sep 2026</p>
         <a class="text-link" href="#guide">
-          Read the practical guide ↓
+          Read the practical guide
         </a>
       </div>
       <TopTenInfographic slug={article.slug} title={article.shortTitle} />
@@ -66,7 +66,7 @@ const { article } = Astro.props;
               <p>{item.check}</p>
             </div>
             <a class="source-link" href={item.source}>
-              Primary source ↗
+              Primary source
             </a>
           </section>
         ))}

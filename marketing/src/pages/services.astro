@@ -2,7 +2,6 @@
 import Base from "../layouts/Base.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
-import Arrow from "../components/Arrow.astro";
 import BookingLink from "../components/BookingLink.astro";
 import { site } from "../data/site";
 const services = [
@@ -164,7 +163,7 @@ const services = [
               <h3>Frameworks &amp; references</h3>
               <div class="package-frameworks">
                 {service.frameworks.map((f) => (
-                  <a href={f.url}>{f.name} ↗</a>
+                  <a href={f.url}>{f.name}</a>
                 ))}
               </div>
               {service.id === "cloud-security" && (
@@ -196,7 +195,6 @@ const services = [
             </div>
             <a class="text-link mt-auto" href={site.bookingUrl}>
               {service.cta}
-              <Arrow />
             </a>
           </article>
         ))}
@@ -235,7 +233,7 @@ const services = [
             class="text-link mt-auto"
             href={`mailto:${site.email}?subject=SOC%202%20readiness`}
           >
-            Discuss SOC 2 <Arrow />
+            Discuss SOC 2
           </a>
         </article>
         <article id="iso-27001" class="service-card flex flex-col">
@@ -249,7 +247,7 @@ const services = [
             class="text-link mt-auto"
             href={`mailto:${site.email}?subject=ISO%2027001%20readiness`}
           >
-            Discuss ISO 27001 <Arrow />
+            Discuss ISO 27001
           </a>
         </article>
         <article id="iso-42001" class="service-card flex flex-col">
@@ -263,7 +261,7 @@ const services = [
             class="text-link mt-auto"
             href={`mailto:${site.email}?subject=ISO%2042001%20readiness`}
           >
-            Discuss ISO 42001 <Arrow />
+            Discuss ISO 42001
           </a>
         </article>
       </div>

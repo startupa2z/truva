@@ -6,8 +6,9 @@ interface Props {
   title: string;
   description: string;
   canonicalPath?: string;
+  extraSchema?: Record<string, unknown>[];
 }
-const { title, description, canonicalPath } = Astro.props;
+const { title, description, canonicalPath, extraSchema = [] } = Astro.props;
 const canonical = new URL(canonicalPath || Astro.url.pathname, site.url).href;
 const graph = {
   "@context": "https://schema.org",
@@ -30,6 +31,7 @@ const graph = {
       url: site.url,
       publisher: { "@id": `${site.url}/#organization` },
     },
+    ...extraSchema,
   ],
 };
 ---

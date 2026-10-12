@@ -1,20 +1,17 @@
 ---
-import { issueCategories, topIssues } from "../data/top-issues";
-const grouped = Object.fromEntries(
-  issueCategories.map((category) => [
-    category.id,
-    topIssues.filter((issue) => issue.category === category.id),
-  ]),
-);
+import { issueCategories, issueLinks } from "../data/top-issues";
+const grouped = issueLinks;
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
 ---
 
-<section class="top-issues" aria-labelledby="top-issues-title">
+<section class:list={["top-issues", { compact }]} aria-labelledby="top-issues-title">
   <div class="top-issues-heading">
     <div>
-      <p class="eyebrow">PRACTICAL SECURITY PRIORITIES</p>
       <h2 id="top-issues-title">Top issues to review first</h2>
     </div>
-    <p>Choose a discipline, identify the risk, and start with a concrete check.</p>
   </div>
   <div class="issue-tabs" role="tablist" aria-label="Top issue categories">
     {issueCategories.map((category, index) => (
@@ -39,15 +36,19 @@ const grouped = Object.fromEntries(
       hidden={index !== 0}
       data-issue-panel={category.id}
     >
-      <p class="issue-category-description">{category.description}</p>
+      {category.description && (
+        <p class="issue-category-description">{category.description}</p>
+      )}
       {grouped[category.id].length > 0 ? (
         <ol class="issue-list">
           {grouped[category.id].map((issue, issueIndex) => (
             <li>
-              <a href={`/security-hub/issues/${issue.slug}`}>
+              <a href={issue.url}>
                 <span>{String(issueIndex + 1).padStart(2, "0")}</span>
-                <strong>{issue.title}</strong>
-                <span aria-hidden="true">→</span>
+                <span class="issue-link-copy">
+                  <strong>{issue.title}</strong>
+                  <small>{issue.sourceName}</small>
+                </span>
               </a>
             </li>
           ))}
@@ -85,20 +86,31 @@ const grouped = Object.fromEntries(
 </script>
 
 <style>
-  .top-issues { border: 1px solid #dbe1ea; border-top: 3px solid #243a6c; border-radius: 10px; background: #fff; padding: 22px; }
+  .top-issues { border: 1px solid #f1daca; border-top: 3px solid #243a6c; border-radius: 10px; background: #fff6ef; padding: 14px 18px; }
   .top-issues-heading { display: flex; justify-content: space-between; gap: 24px; align-items: start; }
-  .top-issues h2 { font-size: 27px; line-height: 1.2; margin-top: 8px; }
+  .top-issues h2 { font-size: 22px; line-height: 1.2; margin: 0; }
   .top-issues-heading > p { color: #526077; font-size: 13px; line-height: 1.55; max-width: 35ch; }
-  .issue-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 12px; }
+  .issue-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 8px; }
   .issue-tabs button { background: #fff; border: 1px solid #ccd5e3; border-radius: 6px; color: #243a6c; cursor: pointer; font-size: 13px; font-weight: 700; min-height: 44px; padding: 10px 13px; }
   .issue-tabs button[aria-selected="true"] { background: #243a6c; border-color: #243a6c; color: #fff; }
-  .issue-category-description { color: #526077; font-size: 12px; margin: 16px 0 10px; }
-  .issue-list { display: grid; gap: 0; list-style: none; margin: 0; padding: 0; }
+  .issue-category-description { color: #526077; font-size: 12px; margin: 6px 0; max-width: none; line-height: 1.4; }
+  .issue-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; list-style: none; margin: 0; padding: 0; }
   .issue-list li { border-top: 1px solid #e7ebf1; }
-  .issue-list a { align-items: center; color: inherit; display: grid; gap: 12px; grid-template-columns: 34px minmax(0, 1fr) auto; min-height: 48px; padding: 10px 0; }
+  .issue-list a { align-items: center; color: inherit; display: grid; gap: 8px; grid-template-columns: 22px minmax(0, 1fr) auto; min-height: 44px; padding: 4px 0; }
   .issue-list a > span:first-child { color: #526077; font-size: 11px; font-weight: 700; }
-  .issue-list strong { font-size: 14px; }
+  .issue-list strong { font-size: 13px; }
+  .issue-link-copy { display: grid; gap: 2px; }
+  .issue-link-copy small { color: #526077; font-size: 11px; line-height: 1.4; }
   .issue-empty { background: #f7f9fc; color: #526077; font-size: 13px; margin-top: 14px; padding: 16px; }
   .top-issues :is(button, a):focus-visible { outline: 2px solid #243a6c; outline-offset: 3px; }
-  @media (max-width: 767px) { .top-issues { padding: 18px; } .top-issues-heading { display: block; } .top-issues-heading > p { margin-top: 12px; } }
+  .top-issues.compact { padding: 14px; }
+  .top-issues.compact h2 { font-size: 18px; }
+  .top-issues.compact .issue-tabs { gap: 5px; }
+  .top-issues.compact .issue-tabs button { font-size: 11px; min-height: 38px; padding: 7px 9px; }
+  .top-issues.compact .issue-category-description { margin: 8px 0; }
+  .top-issues.compact .issue-list { grid-template-columns: minmax(0, 1fr); }
+  .top-issues.compact .issue-list a { min-height: 40px; padding: 5px 0; }
+  .top-issues.compact .issue-list strong { font-size: 12px; line-height: 1.25; }
+  .top-issues.compact .issue-link-copy small { display: none; }
+  @media (max-width: 767px) { .top-issues { padding: 14px; } .top-issues-heading { display: block; } .top-issues-heading > p { margin-top: 8px; } .issue-list { grid-template-columns: minmax(0, 1fr); } }
 </style>
