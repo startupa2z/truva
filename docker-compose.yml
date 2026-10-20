@@ -1,4 +1,46 @@
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: truva-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: truva
+      POSTGRES_USER: truva
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-truva-local-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U truva -d truva"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        SOURCE_COMMIT: local
+    container_name: truva-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://truva:${POSTGRES_PASSWORD:-truva-local-password}@db:5432/truva
+      FRONTEND_ORIGIN: http://127.0.0.1:8888
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-local-development-admin-key-change-me}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
   frontend:
     build:
       context: .
@@ -8,12 +50,12 @@ services:
         BUILD_SCRIPT: build
     container_name: truva-frontend
     restart: unless-stopped
-    environment:
-      COMMUNITY_ORIGIN: http://127.0.0.1:8888
     ports:
       - "8888:80"
-    volumes:
-      - community_data:/data
+    depends_on:
+      backend:
+        condition: service_healthy
+
 volumes:
-  community_data:
-    name: truva_community_data
+  postgres_data:
+    name: truva_postgres_data

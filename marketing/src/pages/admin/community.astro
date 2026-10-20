@@ -5,7 +5,7 @@ import Base from "../../layouts/Base.astro";
 
 <Base
   title="Community & visits | Truva admin"
-  description="Private comment moderation and page-view counts."
+  description="Private page-view and visitor counts."
 >
   <main id="main" class="shell admin-page">
     <a href="/">Website</a>
@@ -37,12 +37,6 @@ import Base from "../../layouts/Base.astro";
       <div id="page-counts"></div>
       <h3>Recent daily views (UTC)</h3>
       <div id="daily-counts"></div>
-      <h2>Comment moderation</h2>
-      <p>
-        Approve, reject, or return a comment to pending. Only approved comments
-        are public.
-      </p>
-      <div id="moderation-list"></div>
     </section>
   </main>
 </Base>
@@ -77,41 +71,6 @@ import Base from "../../layouts/Base.astro";
       const days = document.querySelector("#daily-counts")!;
       days.replaceChildren();
       for (const row of data.days) line(days, `${row.day} — ${row.views} views · ${row.visitors} visitors`);
-      const list = document.querySelector("#moderation-list")!;
-      list.replaceChildren();
-      if (!data.comments.length) line(list, "No comments submitted yet.");
-      for (const item of data.comments) {
-        const card = document.createElement("article");
-        const title = document.createElement("h3");
-        title.textContent = `${item.name} · ${item.status}`;
-        card.append(title);
-        line(card, item.slug);
-        line(card, item.body);
-        for (const state of ["approved", "rejected", "pending"]) {
-          const button = document.createElement("button");
-          button.textContent =
-            state === "approved"
-              ? "Approve"
-              : state === "rejected"
-                ? "Reject"
-                : "Set pending";
-          button.disabled = item.status === state;
-          button.addEventListener("click", async () => {
-            try {
-              await api("comments", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: item.id, status: state }),
-              });
-              await refresh();
-            } catch (e) {
-              status.textContent = String(e);
-            }
-          });
-          card.append(button);
-        }
-        list.append(card);
-      }
       status.textContent = "";
     } catch (e) {
       panel.hidden = true;
@@ -193,22 +152,6 @@ import Base from "../../layouts/Base.astro";
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-  }
-  #moderation-list :global(article) {
-    border: 1px solid var(--color-line);
-    padding: 24px;
-    margin-top: 24px;
-    border-radius: 8px;
-  }
-  #moderation-list :global(button) {
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid var(--color-brand-blue);
-    border-radius: 4px;
-  }
-  #moderation-list :global(p) {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
   }
   code {
     overflow-wrap: anywhere;

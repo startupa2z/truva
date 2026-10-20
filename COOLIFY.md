@@ -1,105 +1,51 @@
 # Deploy Truva on Coolify
 
-Your Coolify project has:
-- **1 application** → `https://truvasolutions.com`
-- **1 PostgreSQL database** → `truva` DB with `users` table
+Truva uses one Docker Compose resource with three services:
 
-Choose **one** deployment style below.
-
----
-
-## Option A — Single domain (no `api` subdomain) **recommended**
-
-Everything runs on `https://truvasolutions.com`:
-- `/` → static site
-- `/api/*` → FastAPI (proxied by frontend nginx)
-- **No extra DNS record needed**
-
-### How it works
-
-```
-Browser → truvasolutions.com
-            ├─ /           → nginx serves HTML/CSS/JS
-            └─ /api/*      → nginx proxies to backend:8000
-                                    └─ PostgreSQL (truva DB)
+```text
+Browser -> frontend (Nginx and Astro)
+             |-> /api/* and /health -> backend (FastAPI)
+                                           |-> db (PostgreSQL)
 ```
 
-### Coolify setup
+Only the frontend is public. FastAPI and PostgreSQL remain on the private Compose network.
 
-1. **Replace** your current application with a **Docker Compose** resource  
-   (or create new and delete the old one after cutover)
+## Coolify configuration
 
-2. **Compose file**: `docker-compose.prod.yml` (repo root)
-
-3. **Domain**: attach `https://truvasolutions.com` to the **`frontend`** service only  
-   (backend has no public domain)
-
-4. **Environment variables** (project or compose env):
+1. Create or update the Truva resource as Docker Compose.
+2. Use `docker-compose.prod.yml` from the repository root.
+3. Attach `https://truvasolutions.com` to the `frontend` service on port 80.
+4. Set these secrets in Coolify:
 
 ```env
-DATABASE_URL=postgresql://USER:PASSWORD@INTERNAL_POSTGRES_HOST:5432/truva
-SECRET_KEY=<long-random-string>
-FRONTEND_URL=https://truvasolutions.com
-LINKEDIN_CLIENT_ID=<your-linkedin-client-id>
-LINKEDIN_CLIENT_SECRET=<your-linkedin-client-secret>
-LINKEDIN_REDIRECT_URI=https://truvasolutions.com/api/auth/linkedin/callback
+POSTGRES_PASSWORD=<long-random-database-password>
+ADMIN_TOKEN=<long-random-admin-token>
+FRONTEND_ORIGIN=https://truvasolutions.com
+SOURCE_COMMIT=<deployed-git-commit>
 ```
 
-`DATABASE_URL`: copy the **internal** Postgres URL from your Coolify PostgreSQL resource and set the database name to `truva`.
+5. Keep the `postgres_data` volume attached to the `db` service.
+6. Configure encrypted PostgreSQL backups outside the application server.
 
-5. **Do not set** `TRUVA_API_BASE` — the frontend uses the same origin automatically.
+Do not publish ports for `backend` or `db`. Do not copy local PostgreSQL data into production.
 
-6. **LinkedIn Developer Portal** → Authorized redirect URL:
+## Verification
 
-```
-https://truvasolutions.com/api/auth/linkedin/callback
-```
+After deployment, verify:
 
-7. Redeploy.
+1. `/health` returns `status: ok`, the deployed commit, and `database: postgres`.
+2. `/`, `/resources`, `/security-hub`, and the affected article routes return 200.
+3. `/api/views` records and deduplicates a valid page event.
+4. `/admin/community` rejects an invalid token and accepts the production `ADMIN_TOKEN`.
+5. The frontend, backend, and database services are healthy.
 
-### Verify
-
-1. `https://truvasolutions.com` → site loads  
-2. `https://truvasolutions.com/health` → `{"status":"ok"}`  
-3. Sign In → LinkedIn → profile popup → photo in nav  
-
----
-
-## Option B — Two subdomains (`api.truvasolutions.com`)
-
-Use two separate Coolify **Application** resources (see previous sections in git history). Requires an extra DNS **A record** for `api`.
-
-| App | Base dir | Domain |
-|-----|----------|--------|
-| Frontend | `/frontend` | `truvasolutions.com` |
-| Backend | `/backend` | `api.truvasolutions.com` |
-
-Frontend env: `TRUVA_API_BASE=https://api.truvasolutions.com`
-
----
-
-## PostgreSQL
-
-You already ran `backend/sql/init.sql` on the `truva` database. No further SQL is required unless you add new tables.
-
-The backend also runs `create_all()` and adds `profile_photo_url` on startup if missing.
-
----
-
-## Local development (unchanged)
+## Local development
 
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
-- Frontend: http://localhost:8888  
-- Backend: http://localhost:8000  
-- Auth JS auto-detects port `8888` and calls backend on `:8000`
-
-For local single-domain testing:
-
-```bash
-API_PROXY_BACKEND=http://host.docker.internal:8000 TRUVA_API_BASE= docker compose -f docker-compose.prod.yml up --build
-```
-
-(Only if you want to test the prod compose layout locally.)
+- Frontend: http://127.0.0.1:8888
+- FastAPI: http://127.0.0.1:8000
+- PostgreSQL: private Docker network only
+- Local admin token: `local-development-admin-key-change-me`, unless overridden with `ADMIN_TOKEN`

@@ -69,7 +69,10 @@ try {
     assert.ok(result.font.startsWith("Arial"));
     assert.ok(result.title.length < 60);
     assert.ok(result.description.length < 155);
-    assert.match(result.robots, process.env.RELEASE_TEST ? /^index/ : /noindex/);
+    assert.match(
+      result.robots,
+      process.env.RELEASE_TEST ? /^index/ : /noindex/,
+    );
     assert.equal(result.canonical, "https://truvasolutions.com/");
     assert.equal(result.schema["@graph"].length, 2);
     await page.keyboard.press("Tab");
@@ -97,7 +100,7 @@ try {
       0,
     );
     assert.equal(
-      await page.locator(".header-inner > .button").getAttribute("href"),
+      await page.locator(".header-actions .button").getAttribute("href"),
       "https://calendly.com/satish-truvasolutions/30min",
     );
     await page.goto(base, { waitUntil: "networkidle" });
@@ -146,8 +149,12 @@ try {
     const page = await routeContext.newPage();
     for (const route of [
       "services",
+      "services/soc-2-readiness",
+      "services/cloud-security-assessment",
+      "services/ai-security-assessment",
       "security-hub",
       "security-hub/guides",
+      "security-hub/ai-security-architecture-review",
     ]) {
       const response = await page.goto(`${base}/${route}`, {
         waitUntil: "networkidle",
@@ -178,7 +185,10 @@ try {
     viewport: { width: 390, height: 844 },
   });
   const page = await reviewContext.newPage();
-  await page.goto(`${base}/${process.env.RELEASE_TEST ? "privacy" : "design-system"}`, { waitUntil: "networkidle" });
+  await page.goto(
+    `${base}/${process.env.RELEASE_TEST ? "privacy" : "design-system"}`,
+    { waitUntil: "networkidle" },
+  );
   const review = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
