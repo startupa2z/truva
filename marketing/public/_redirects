@@ -1,4 +1,9 @@
-/resources /security-hub 301
-/resources/blogs /security-hub/guides 301
-/resources/white-papers /security-hub 301
-/resources/case-studies /security-hub 301
+/resources/blogs /resources 301
+/resources/white-papers /resources 301
+/resources/case-studies /resources 301
+/blog.html /security-hub/guides 301
+/blog/ai-security-checklist.html /blog/top-10-ai-security-risks-2026.html 301
+/blog/how-to-prepare-application-security-testing.html /resources 301
+/blog/internal-vs-external-pen-testing.html /resources 301
+/blog/owasp-top-10-explained.html /security-hub/guides 301
+/blog/would-your-company-survive-ransomware-attack.html /resources 301

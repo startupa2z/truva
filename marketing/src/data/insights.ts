@@ -1,4 +1,3 @@
-// Existing URLs are preserved. The top-10 article has a local editorial preview; other articles still link to the live site.
 // Ordering is editorial, not a claim about publication dates.
 export const insights = [
   {
@@ -8,6 +7,15 @@ export const insights = [
     url: "/blog/sf-tech-week-2026",
     local: true,
     mark: "SF",
+  },
+  {
+    category: "AI SECURITY",
+    title: "Review AI Security Architecture Before It Hardens",
+    description:
+      "Why early AI architecture review protects options before security decisions become expensive to change.",
+    url: "/security-hub/ai-security-architecture-review",
+    local: true,
+    mark: "00",
   },
   {
     category: "CLOUD SECURITY",
@@ -38,20 +46,5 @@ export const insights = [
       "Practical examples, first actions, and evidence to keep—from shadow AI to agent permissions.",
     url: "/blog/top-10-ai-security-risks-2026.html",
     mark: "01",
-  },
-  {
-    category: "PRACTICAL GUIDE",
-    title: "The AI security checklist",
-    description: "Bring a more structured review to the AI you build and use.",
-    url: "/blog/ai-security-checklist.html",
-    mark: "02",
-  },
-  {
-    category: "BUSINESS RESILIENCE",
-    title: "Would your company survive a ransomware attack?",
-    description:
-      "Questions to ask before an incident puts your response to the test.",
-    url: "/blog/would-your-company-survive-ransomware-attack.html",
-    mark: "03",
   },
 ];

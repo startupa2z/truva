@@ -30,6 +30,14 @@ export function createCommunityServer({root,dbPath,adminToken,origin='http://127
   function walk(folder){for(const entry of readdirSync(folder,{withFileTypes:true})){const file=join(folder,entry.name);if(entry.isDirectory())walk(file);else if(entry.name.endsWith('.html')){const rel=file.slice(root.length).replaceAll(sep,'/').replace(/\/index\.html$/,'');pages.add(rel||'/');}}}
   walk(root);
   const blogPaths=new Set([...pages].filter(p=>p.startsWith('/blog/')));
+  const redirects=new Map([
+    ['/blog.html','/security-hub/guides'],
+    ['/blog/ai-security-checklist.html','/blog/top-10-ai-security-risks-2026.html'],
+    ['/blog/how-to-prepare-application-security-testing.html','/resources'],
+    ['/blog/internal-vs-external-pen-testing.html','/resources'],
+    ['/blog/owasp-top-10-explained.html','/security-hub/guides'],
+    ['/blog/would-your-company-survive-ransomware-attack.html','/resources'],
+  ]);
   const hash=(s)=>createHash('sha256').update(salt).update(s).digest('hex');
   const json=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(data));};
   function limit(req,kind,max,ms){const key=hash((trustProxy ? String(req.headers['x-forwarded-for']||'').split(',').at(-1).trim() || req.socket.remoteAddress : req.socket.remoteAddress || '')+kind);const time=now();let record=limits.get(key);if(!record||record.until<time){record={n:0,until:time+ms};limits.set(key,record);}if(limits.size>10000)for(const [k,v] of limits)if(v.until<time)limits.delete(k);if(++record.n>max)throw Object.assign(new Error('Too many requests. Please try again later.'),{status:429});}
@@ -41,7 +49,8 @@ export function createCommunityServer({root,dbPath,adminToken,origin='http://127
     const url=new URL(req.url,origin);const path=url.pathname;
     res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');
     if(path==='/health'&&req.method==='GET'){db.prepare('SELECT 1').get();return json(res,200,{status:'ok',commit:process.env.RELEASE_COMMIT||'local'});}
-    if(['/resources','/resources/','/resources/blogs','/resources/blogs/','/resources/white-papers','/resources/white-papers/','/resources/case-studies','/resources/case-studies/','/blog.html'].includes(path)){res.writeHead(301,{Location:path==='/blog.html'||path.startsWith('/resources/blogs')?'/security-hub/guides':'/security-hub'});return res.end();}
+    if(['/resources/blogs','/resources/blogs/','/resources/white-papers','/resources/white-papers/','/resources/case-studies','/resources/case-studies/'].includes(path)){res.writeHead(301,{Location:'/resources'});return res.end();}
+    if(redirects.has(path)){res.writeHead(301,{Location:redirects.get(path)});return res.end();}
     if(process.env.NODE_ENV==='production'&&path.startsWith('/design-system'))fail('Not found.',404);
     if(path.startsWith('/api/')) {
       if(req.method==='POST'||req.method==='PATCH'){

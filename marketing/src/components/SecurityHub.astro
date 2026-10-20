@@ -48,7 +48,7 @@ const collection = {"@context":"https://schema.org","@type":"CollectionPage",nam
   description="Explore Truva Solutions’ practical AI security, cloud security and compliance guides, visual checklists, and trusted primary sources."
 >
   <script type="application/ld+json" set:html={JSON.stringify(collection).replace(/</g,"\\u003c")} />
-  <SiteHeader showBooking={false} pageTitle="Security Hub" />
+  <SiteHeader />
   <main id="main" class="hub shell">
     <div class="hub-layout">
       <aside class="hub-sidebar">
@@ -74,7 +74,7 @@ const collection = {"@context":"https://schema.org","@type":"CollectionPage",nam
         <HubIntelligence />
         <section id="overview" aria-labelledby="topics-title">
           <div class="section-label">
-            <h2 id="topics-title">Explore your focus area</h2>
+            <h1 id="topics-title">Explore your focus area</h1>
             <span>Three disciplines. One place.</span>
           </div>
           <div class="topic-grid">
@@ -456,6 +456,7 @@ const collection = {"@context":"https://schema.org","@type":"CollectionPage",nam
     gap: 12px;
     margin-bottom: 16px;
   }
+  .section-label h1,
   .section-label h2,
   .start-panel h2,
   .share-panel h2 {
@@ -816,6 +817,7 @@ const collection = {"@context":"https://schema.org","@type":"CollectionPage",nam
     .framework-grid {
       gap: 26px;
     }
+    .section-label h1,
     .section-label h2 {
       font-size: 21px;
     }

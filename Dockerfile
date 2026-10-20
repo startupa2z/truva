@@ -3,8 +3,8 @@ WORKDIR /app/marketing
 COPY marketing/package*.json ./
 RUN npm ci
 COPY marketing/ ./
-COPY frontend/ /app/frontend/
-RUN npm run build:release
+ARG BUILD_SCRIPT=build:release
+RUN npm run "$BUILD_SCRIPT"
 
 FROM node:22-bookworm-slim
 ARG SOURCE_COMMIT=unknown
