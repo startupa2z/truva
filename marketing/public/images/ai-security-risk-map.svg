@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Ten AI security issues grouped into four review areas</title>
+  <desc id="desc">A landscape map grouping ten AI security issues under visibility, data, capability, and trust.</desc>
+  <rect width="1200" height="675" rx="28" fill="#173765"/>
+  <circle cx="1080" cy="78" r="170" fill="#244a80" opacity="0.7"/>
+  <circle cx="1090" cy="595" r="220" fill="#10294d" opacity="0.75"/>
+  <text x="62" y="70" fill="#ff9a62" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" letter-spacing="2">AI SECURITY REVIEW MAP</text>
+  <text x="62" y="120" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700">Ten issues. Four connected review areas.</text>
+  <text x="62" y="158" fill="#dce5f4" font-family="Arial, Helvetica, sans-serif" font-size="18">Start with the area that can expose sensitive data or enable a high-impact action.</text>
+
+  <g transform="translate(62 214)">
+    <rect width="252" height="356" rx="18" fill="#ffffff"/>
+    <rect width="252" height="64" rx="18" fill="#fff6ef"/>
+    <rect y="46" width="252" height="18" fill="#fff6ef"/>
+    <text x="22" y="39" fill="#733819" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Know what exists</text>
+    <circle cx="30" cy="105" r="17" fill="#ed7434"/>
+    <text x="30" y="111" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">1</text>
+    <text x="58" y="111" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Untracked AI use</text>
+    <line x1="22" y1="140" x2="230" y2="140" stroke="#d9e0ea"/>
+    <circle cx="30" cy="177" r="17" fill="#ed7434"/>
+    <text x="30" y="183" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">10</text>
+    <text x="58" y="173" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Reviews that end</text>
+    <text x="58" y="196" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">at launch</text>
+    <rect x="22" y="235" width="208" height="82" rx="10" fill="#f3f6fb"/>
+    <text x="38" y="265" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="14">Core evidence</text>
+    <text x="38" y="291" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Inventory and owners</text>
+  </g>
+
+  <g transform="translate(337 214)">
+    <rect width="252" height="356" rx="18" fill="#ffffff"/>
+    <rect width="252" height="64" rx="18" fill="#edf2fa"/>
+    <rect y="46" width="252" height="18" fill="#edf2fa"/>
+    <text x="22" y="39" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Protect information</text>
+    <circle cx="30" cy="105" r="17" fill="#ed7434"/>
+    <text x="30" y="111" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">2</text>
+    <text x="58" y="111" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Data leakage</text>
+    <line x1="22" y1="140" x2="230" y2="140" stroke="#d9e0ea"/>
+    <circle cx="30" cy="177" r="17" fill="#ed7434"/>
+    <text x="30" y="183" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">7</text>
+    <text x="58" y="173" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Search access</text>
+    <text x="58" y="196" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">gaps</text>
+    <rect x="22" y="235" width="208" height="82" rx="10" fill="#f3f6fb"/>
+    <text x="38" y="265" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="14">Core evidence</text>
+    <text x="38" y="291" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Data and access tests</text>
+  </g>
+
+  <g transform="translate(612 214)">
+    <rect width="252" height="356" rx="18" fill="#ffffff"/>
+    <rect width="252" height="64" rx="18" fill="#fff6ef"/>
+    <rect y="46" width="252" height="18" fill="#fff6ef"/>
+    <text x="22" y="39" fill="#733819" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Limit capabilities</text>
+    <circle cx="30" cy="105" r="17" fill="#ed7434"/>
+    <text x="30" y="111" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">3</text>
+    <text x="58" y="111" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">API access controls</text>
+    <circle cx="30" cy="161" r="17" fill="#ed7434"/>
+    <text x="30" y="167" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">4</text>
+    <text x="58" y="167" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Agent permissions</text>
+    <circle cx="30" cy="217" r="17" fill="#ed7434"/>
+    <text x="30" y="223" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">8</text>
+    <text x="58" y="223" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Human approval</text>
+    <rect x="22" y="255" width="208" height="62" rx="10" fill="#f3f6fb"/>
+    <text x="38" y="282" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="14">Core evidence</text>
+    <text x="38" y="304" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Permission tests</text>
+  </g>
+
+  <g transform="translate(887 214)">
+    <rect width="252" height="356" rx="18" fill="#ffffff"/>
+    <rect width="252" height="64" rx="18" fill="#edf2fa"/>
+    <rect y="46" width="252" height="18" fill="#edf2fa"/>
+    <text x="22" y="39" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Trust and trace</text>
+    <circle cx="30" cy="105" r="17" fill="#ed7434"/>
+    <text x="30" y="111" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">5</text>
+    <text x="58" y="111" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Prompt injection</text>
+    <circle cx="30" cy="161" r="17" fill="#ed7434"/>
+    <text x="30" y="167" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">6</text>
+    <text x="58" y="167" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Dependencies</text>
+    <circle cx="30" cy="217" r="17" fill="#ed7434"/>
+    <text x="30" y="223" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">9</text>
+    <text x="58" y="223" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Activity records</text>
+    <rect x="22" y="255" width="208" height="62" rx="10" fill="#f3f6fb"/>
+    <text x="38" y="282" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="14">Core evidence</text>
+    <text x="38" y="304" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Test and run records</text>
+  </g>
+
+  <text x="62" y="626" fill="#dce5f4" font-family="Arial, Helvetica, sans-serif" font-size="16">People · Product · Process</text>
+  <text x="1138" y="626" text-anchor="end" fill="#ff9a62" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">TRUVA SOLUTIONS</text>
+</svg>

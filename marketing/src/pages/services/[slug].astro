@@ -1,0 +1,169 @@
+---
+import Base from "../../layouts/Base.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import BookingLink from "../../components/BookingLink.astro";
+import { serviceDetails } from "../../data/service-details";
+import { site } from "../../data/site";
+
+export function getStaticPaths() {
+  return serviceDetails.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const url = `${site.url}/services/${service.slug}`;
+const schema = [
+  {
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name: service.bookingSubject,
+    description: service.description,
+    url,
+    serviceType: service.bookingSubject,
+    provider: { "@id": `${site.url}/#organization` },
+    areaServed: { "@type": "Country", name: "United States" },
+  },
+  {
+    "@type": "BreadcrumbList",
+    "@id": `${url}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${site.url}/services` },
+      { "@type": "ListItem", position: 3, name: service.bookingSubject, item: url },
+    ],
+  },
+];
+---
+
+<Base title={service.title} description={service.description} extraSchema={schema}>
+  <SiteHeader />
+  <main id="main" class="detail-page">
+    <div class="shell breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a><span aria-hidden="true">/</span>
+      <a href="/services">Services</a><span aria-hidden="true">/</span>
+      <span>{service.bookingSubject}</span>
+    </div>
+    <header class="shell detail-hero">
+      <p class="eyebrow">{service.category} / FOCUSED ASSESSMENT</p>
+      <h1>{service.heading}</h1>
+      <p class="detail-lead">{service.introduction}</p>
+      <div class="hero-action">
+        <BookingLink label="Discuss a scoped assessment" />
+        <span>Start with a 30-minute conversation.</span>
+      </div>
+    </header>
+
+    <section class="section-border detail-section" aria-labelledby="outcome-title">
+      <div class="shell two-column">
+        <div>
+          <p class="eyebrow">THE PROBLEM</p>
+          <h2>Why teams call us</h2>
+          <p>{service.problem}</p>
+        </div>
+        <div>
+          <p class="eyebrow">THE OUTCOME</p>
+          <h2 id="outcome-title">What improves</h2>
+          <p>{service.outcome}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell detail-section" aria-labelledby="fit-title">
+      <div class="detail-heading">
+        <p class="eyebrow">WHO IT FITS</p>
+        <h2 id="fit-title">A focused starting point.</h2>
+      </div>
+      <ul class="detail-list fit-list">
+        {service.fit.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="section-border detail-section" aria-labelledby="review-title">
+      <div class="shell two-column">
+        <div>
+          <p class="eyebrow">SCOPE</p>
+          <h2 id="review-title">What we review</h2>
+          <ul class="detail-list">{service.review.map((item) => <li>{item}</li>)}</ul>
+        </div>
+        <div>
+          <p class="eyebrow">DELIVERABLES</p>
+          <h2>What you receive</h2>
+          <ul class="detail-list">{service.deliverables.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell detail-section" aria-labelledby="questions-title">
+      <div class="detail-heading">
+        <p class="eyebrow">PRACTICAL DETAILS</p>
+        <h2 id="questions-title">Questions to settle early.</h2>
+      </div>
+      <div class="question-grid">
+        {service.questions.map((item) => (
+          <div>
+            <h3>{item.question}</h3>
+            <p>{item.answer}</p>
+          </div>
+        ))}
+      </div>
+      <p class="scope-note">{service.scopeNote}</p>
+      <p class="references">
+        References: {service.references.map((source, index) => (
+          <><a href={source.url}>{source.name}</a>{index < service.references.length - 1 ? " · " : ""}</>
+        ))}
+      </p>
+    </section>
+    <section class="detail-cta" aria-labelledby="next-step-title">
+      <div class="shell two-column">
+        <div>
+          <p class="eyebrow">NEXT STEP</p>
+          <h2 id="next-step-title">Start with a clear scope.</h2>
+          <p>Tell us what prompted the review, who owns the decision, and when you need an answer. We’ll discuss a written scope, timeline, and fee before work begins.</p>
+        </div>
+        <div class="cta-action">
+          <BookingLink label="Book a consult" light />
+          <a href={`mailto:${site.email}?subject=${encodeURIComponent(service.bookingSubject)}`}>Or email {site.email}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</Base>
+
+<style>
+  .detail-page { color: var(--color-ink); }
+  .breadcrumb { display: flex; align-items: center; gap: 10px; padding-top: 26px; font-size: 13px; color: var(--color-muted); }
+  .breadcrumb a { color: var(--color-brand-blue); text-decoration: underline; text-underline-offset: 3px; }
+  .detail-hero { padding-block: 68px 80px; }
+  .detail-hero h1 { max-width: 17ch; font-size: clamp(40px, 5.3vw, 70px); line-height: 1.07; letter-spacing: -0.05em; margin-top: 22px; }
+  .detail-lead { max-width: 67ch; font-size: clamp(18px, 1.8vw, 22px); line-height: 1.55; color: var(--color-muted); margin-top: 26px; }
+  .hero-action { display: flex; align-items: center; gap: 18px; margin-top: 32px; }
+  .hero-action span { color: var(--color-muted); font-size: 13px; }
+  .detail-section { padding-block: 72px; }
+  .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 7vw, 110px); }
+  .detail-section h2, .detail-cta h2 { font-size: clamp(30px, 3vw, 42px); line-height: 1.15; letter-spacing: -0.04em; margin: 14px 0 20px; }
+  .detail-section p, .detail-cta p { max-width: 64ch; color: var(--color-muted); line-height: 1.7; }
+  .detail-heading { margin-bottom: 26px; }
+  .detail-list { list-style: none; padding: 0; margin: 0; }
+  .detail-list li { padding: 16px 0 16px 22px; border-top: 1px solid var(--color-line); position: relative; line-height: 1.5; }
+  .detail-list li::before { content: ""; position: absolute; top: 25px; left: 0; width: 8px; height: 8px; border: 2px solid var(--color-brand-blue); border-radius: 50%; }
+  .fit-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .question-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 34px; }
+  .question-grid h3 { font-size: 21px; line-height: 1.3; margin-bottom: 10px; }
+  .scope-note { border-left: 3px solid var(--color-brand-orange); padding: 14px 20px; background: #fff6ef; margin-top: 36px; }
+  .references { font-size: 13px; margin-top: 24px; }
+  .references a { color: var(--color-brand-blue); text-decoration: underline; text-underline-offset: 3px; }
+  .detail-cta { background: var(--color-brand-blue); color: white; padding-block: 60px; }
+  .detail-cta p { color: #e6edf8; }
+  .cta-action { display: grid; align-content: center; justify-items: start; gap: 16px; }
+  .cta-action > a { color: white; text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 767px) {
+    .detail-hero { padding-block: 48px 60px; }
+    .detail-section { padding-block: 48px; }
+    .two-column, .fit-list, .question-grid { grid-template-columns: 1fr; }
+    .hero-action { flex-wrap: wrap; }
+  }
+</style>

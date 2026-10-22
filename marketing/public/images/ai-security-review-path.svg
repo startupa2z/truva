@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">AI security review path</title>
+  <desc id="desc">A four-stage AI workflow showing the security question to ask at each stage: input, context, tools, and action.</desc>
+  <rect width="1200" height="620" rx="28" fill="#f3f6fb"/>
+  <text x="70" y="82" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="2">REVIEW THE COMPLETE PATH</text>
+  <text x="70" y="132" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Four places where an AI workflow can fail</text>
+  <text x="70" y="172" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="18">Follow one use case from the information it receives to the action it takes.</text>
+
+  <g transform="translate(70 230)">
+    <rect width="235" height="245" rx="18" fill="#ffffff" stroke="#d9e0ea" stroke-width="2"/>
+    <circle cx="42" cy="43" r="22" fill="#ed7434"/>
+    <text x="42" y="50" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">1</text>
+    <text x="26" y="95" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Input</text>
+    <text x="26" y="129" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="16">Prompts, files,</text>
+    <text x="26" y="154" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="16">emails, webpages</text>
+    <line x1="26" y1="181" x2="209" y2="181" stroke="#d9e0ea"/>
+    <text x="26" y="213" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Can we trust it?</text>
+  </g>
+
+  <path d="M315 352H350" stroke="#ed7434" stroke-width="4" stroke-linecap="round"/>
+  <path d="M340 342L350 352L340 362" fill="none" stroke="#ed7434" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g transform="translate(360 230)">
+    <rect width="235" height="245" rx="18" fill="#ffffff" stroke="#d9e0ea" stroke-width="2"/>
+    <circle cx="42" cy="43" r="22" fill="#ed7434"/>
+    <text x="42" y="50" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">2</text>
+    <text x="26" y="95" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Context</text>
+    <text x="26" y="129" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="16">Data, retrieval,</text>
+    <text x="26" y="154" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="16">identity, memory</text>
+    <line x1="26" y1="181" x2="209" y2="181" stroke="#d9e0ea"/>
+    <text x="26" y="213" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Should this user see it?</text>
+  </g>
+
+  <path d="M605 352H640" stroke="#ed7434" stroke-width="4" stroke-linecap="round"/>
+  <path d="M630 342L640 352L630 362" fill="none" stroke="#ed7434" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g transform="translate(650 230)">
+    <rect width="235" height="245" rx="18" fill="#ffffff" stroke="#d9e0ea" stroke-width="2"/>
+    <circle cx="42" cy="43" r="22" fill="#ed7434"/>
+    <text x="42" y="50" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">3</text>
+    <text x="26" y="95" fill="#173765" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Tools</text>
+    <text x="26" y="129" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="16">APIs, agents,</text>
+    <text x="26" y="154" fill="#506078" font-family="Arial, Helvetica, sans-serif" font-size="16">connectors, keys</text>
+    <line x1="26" y1="181" x2="209" y2="181" stroke="#d9e0ea"/>
+    <text x="26" y="213" fill="#202633" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Is access limited?</text>
+  </g>
+
+  <path d="M895 352H930" stroke="#ed7434" stroke-width="4" stroke-linecap="round"/>
+  <path d="M920 342L930 352L920 362" fill="none" stroke="#ed7434" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g transform="translate(940 230)">
+    <rect width="190" height="245" rx="18" fill="#173765"/>
+    <circle cx="42" cy="43" r="22" fill="#ed7434"/>
+    <text x="42" y="50" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">4</text>
+    <text x="26" y="95" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Action</text>
+    <text x="26" y="129" fill="#dce5f4" font-family="Arial, Helvetica, sans-serif" font-size="16">Send, update,</text>
+    <text x="26" y="154" fill="#dce5f4" font-family="Arial, Helvetica, sans-serif" font-size="16">approve, transact</text>
+    <line x1="26" y1="181" x2="164" y2="181" stroke="#ffffff" stroke-opacity="0.24"/>
+    <text x="26" y="213" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Who approves it?</text>
+  </g>
+
+  <rect x="70" y="520" width="1060" height="54" rx="12" fill="#fff6ef" stroke="#f3d2c0"/>
+  <text x="600" y="554" text-anchor="middle" fill="#733819" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">Evidence should connect the input, identity, tool call, approval, and final action.</text>
+</svg>

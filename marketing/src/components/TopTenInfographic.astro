@@ -2,8 +2,9 @@
 interface Props {
   slug: string;
   title: string;
+  showCaption?: boolean;
 }
-const { slug, title } = Astro.props;
+const { slug, title, showCaption = true } = Astro.props;
 ---
 
 <figure class="top-ten-graphic">
@@ -20,16 +21,18 @@ const { slug, title } = Astro.props;
       fetchpriority="high"
     />
   </a>
-  <figcaption>
-    <a href="/security-hub" class="graphic-brand">
-      <img src="/images/truva-mark.webp" alt="" width="20" height="22" /> Truva
-      Solutions · Security Hub
-    </a>
-    <span>© 2026 TRUVA SOLUTIONS</span>
-    <a href={`/infographics/${slug}.png`} download>
-      Download infographic
-    </a>
-  </figcaption>
+  {showCaption && (
+    <figcaption>
+      <a href="/security-hub" class="graphic-brand">
+        <img src="/images/truva-mark.webp" alt="" width="20" height="22" /> Truva
+        Solutions · Security Hub
+      </a>
+      <span>© 2026 TRUVA SOLUTIONS</span>
+      <a href={`/infographics/${slug}.png`} download>
+        Download infographic
+      </a>
+    </figcaption>
+  )}
 </figure>
 <style>
   .graphic-brand {

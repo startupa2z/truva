@@ -1,0 +1,713 @@
+---
+import Base from "../../layouts/Base.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import BookingLink from "../../components/BookingLink.astro";
+import {
+  resources,
+  resourceTopics,
+  resourceTypes,
+  type ResourceType,
+} from "../../data/resources";
+
+const title = "Explore resources | Truva Solutions";
+const description =
+  "Explore Truva blogs, event field notes, and practical resources on AI security, cloud security, application security, compliance, and growing secure products.";
+const publishedCounts = Object.fromEntries(
+  resourceTypes.map((type) => [
+    type,
+    resources.filter((resource) => resource.type === type).length,
+  ]),
+) as Record<ResourceType, number>;
+---
+
+<Base title={title} description={description} canonicalPath="/resources">
+  <SiteHeader />
+  <main id="main" class="resources-page">
+    <header class="resources-hero shell">
+      <h1>Explore resources</h1>
+      <p>
+        Practical field notes, security guidance, and evidence-focused ideas for
+        teams building and growing secure products.
+      </p>
+      <form class="resource-search" role="search" data-resource-search>
+        <label class="sr-only" for="resource-query">Search resources</label>
+        <svg
+          class="search-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="m16 16 4 4"></path>
+        </svg>
+        <input
+          id="resource-query"
+          name="query"
+          type="search"
+          placeholder="Search by title, topic, or keyword"
+          autocomplete="off"
+        />
+        <button type="submit">Search</button>
+      </form>
+    </header>
+
+    <section class="resource-library shell" aria-labelledby="resource-results-title">
+      <aside class="resource-filters" aria-label="Resource filters">
+        <div class="filter-topline">
+          <h2>Filter resources</h2>
+          <button type="button" class="clear-filters" data-clear-filters>
+            Clear
+          </button>
+        </div>
+
+        <fieldset>
+          <legend>Content type</legend>
+          {resourceTypes.map((type) => (
+            <label>
+              <input type="checkbox" name="resource-type" value={type} />
+              <span>{type}</span>
+              <small>{publishedCounts[type] || "Soon"}</small>
+            </label>
+          ))}
+        </fieldset>
+
+        <fieldset>
+          <legend>Topic</legend>
+          {resourceTopics.map((topic) => (
+            <label>
+              <input type="checkbox" name="resource-topic" value={topic} />
+              <span>{topic}</span>
+              <small>
+                {resources.filter((resource) => resource.topic === topic).length}
+              </small>
+            </label>
+          ))}
+        </fieldset>
+      </aside>
+
+      <div class="resource-results">
+        <div class="results-heading">
+          <p id="resource-results-title" data-result-count aria-live="polite">
+            Showing {resources.length} resources
+          </p>
+          <p class="results-note">Newest and most useful first</p>
+        </div>
+
+        <div class="resource-grid" data-resource-grid>
+          {resources.map((resource, index) => (
+            <article
+              class="resource-card"
+              data-resource-card
+              data-type={resource.type}
+              data-topic={resource.topic}
+              data-search={`${resource.title} ${resource.description} ${resource.type} ${resource.topic} ${resource.mark}`.toLowerCase()}
+            >
+              <a href={resource.url}>
+                <div class:list={["resource-art", { "has-image": resource.image }]}>
+                  {resource.image ? (
+                    <img
+                      src={resource.image}
+                      alt={resource.imageAlt || ""}
+                      width="800"
+                      height="500"
+                      loading={index < 6 ? "eager" : "lazy"}
+                    />
+                  ) : (
+                    <>
+                      <span class="art-orbit"></span>
+                      <span class="art-grid"></span>
+                      <strong>{resource.topic.split(" ")[0]}</strong>
+                    </>
+                  )}
+                </div>
+                <div class="resource-card-body">
+                  <div class="resource-meta">
+                    <span>{resource.type}</span>
+                    <span>{resource.topic}</span>
+                  </div>
+                  <h2>{resource.title}</h2>
+                  <p>{resource.description}</p>
+                  <span class="resource-action">
+                    {resource.type === "Events" ? "Read event notes" : "Read resource"}
+                  </span>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+
+        <div class="resource-empty" data-resource-empty hidden>
+          <p class="eyebrow">RESOURCE PIPELINE</p>
+          <h2>No published resources match yet.</h2>
+          <p data-empty-copy>
+            Try another topic or clear the filters to browse the current library.
+          </p>
+          <button type="button" data-clear-filters>View all resources</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="resource-cta section-border">
+      <div class="shell resource-cta-inner">
+        <div>
+          <p class="eyebrow">APPLY THE GUIDANCE</p>
+          <h2>Turn the next useful idea into a focused security review.</h2>
+        </div>
+        <div>
+          <p>
+            Bring your current architecture, cloud environment, or compliance
+            question. We’ll help you define the right first review.
+          </p>
+          <BookingLink label="Talk to a security practitioner" />
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</Base>
+
+<script>
+  const page = document.querySelector<HTMLElement>(".resources-page");
+  const searchForm = page?.querySelector<HTMLFormElement>("[data-resource-search]");
+  const searchInput = page?.querySelector<HTMLInputElement>("#resource-query");
+  const cards = Array.from(
+    page?.querySelectorAll<HTMLElement>("[data-resource-card]") || [],
+  );
+  const count = page?.querySelector<HTMLElement>("[data-result-count]");
+  const empty = page?.querySelector<HTMLElement>("[data-resource-empty]");
+  const emptyCopy = page?.querySelector<HTMLElement>("[data-empty-copy]");
+  const filters = Array.from(
+    page?.querySelectorAll<HTMLInputElement>(
+      'input[name="resource-type"], input[name="resource-topic"]',
+    ) || [],
+  );
+
+  const selectedValues = (name: string) =>
+    filters
+      .filter((input) => input.name === name && input.checked)
+      .map((input) => input.value);
+
+  const updateResults = () => {
+    const query = searchInput?.value.trim().toLowerCase() || "";
+    const selectedTypes = selectedValues("resource-type");
+    const selectedTopics = selectedValues("resource-topic");
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const matchesQuery = !query || card.dataset.search?.includes(query);
+      const matchesType =
+        selectedTypes.length === 0 || selectedTypes.includes(card.dataset.type || "");
+      const matchesTopic =
+        selectedTopics.length === 0 || selectedTopics.includes(card.dataset.topic || "");
+      const matches = Boolean(matchesQuery && matchesType && matchesTopic);
+      card.hidden = !matches;
+      if (matches) visible += 1;
+    });
+
+    if (count) count.textContent = `Showing ${visible} resource${visible === 1 ? "" : "s"}`;
+    if (empty) empty.hidden = visible !== 0;
+    if (emptyCopy) {
+      const unpublishedType =
+        selectedTypes.length === 1 && ["White Paper", "Case Study"].includes(selectedTypes[0]);
+      emptyCopy.textContent = unpublishedType
+        ? `${selectedTypes[0]} resources are being prepared. Clear the filters to browse current Truva blogs and guides.`
+        : "Try another topic or clear the filters to browse the current library.";
+    }
+  };
+
+  const requestedType = new URLSearchParams(window.location.search).get("type");
+  const requestedTypeFilter = filters.find(
+    (input) => input.name === "resource-type" && input.value === requestedType,
+  );
+  if (requestedTypeFilter) requestedTypeFilter.checked = true;
+
+  searchForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    updateResults();
+  });
+  searchInput?.addEventListener("input", updateResults);
+  filters.forEach((input) => input.addEventListener("change", updateResults));
+  page?.querySelectorAll<HTMLButtonElement>("[data-clear-filters]").forEach((button) =>
+    button.addEventListener("click", () => {
+      filters.forEach((input) => (input.checked = false));
+      if (searchInput) searchInput.value = "";
+      window.history.replaceState({}, "", "/resources");
+      updateResults();
+      searchInput?.focus();
+    }),
+  );
+  updateResults();
+</script>
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .resources-hero {
+    padding-block: 42px 30px;
+    text-align: center;
+  }
+
+  .resources-hero h1 {
+    font-size: clamp(38px, 4.8vw, 58px);
+    letter-spacing: -0.05em;
+  }
+
+  .resources-hero > p:not(.eyebrow) {
+    margin: 12px auto 0;
+    max-width: 680px;
+    color: var(--color-muted);
+    font-size: 16px;
+  }
+
+  .resource-search {
+    position: relative;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    align-items: center;
+    width: min(900px, 100%);
+    margin: 24px auto 0;
+    padding: 7px;
+    border: 1px solid #cfd7e4;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(36, 58, 108, 0.07);
+  }
+
+  .search-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 7px;
+    color: var(--color-brand-blue);
+    opacity: 0.72;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .resource-search input {
+    width: 100%;
+    min-height: 48px;
+    border: 0;
+    outline: 0;
+    padding: 0 10px;
+    color: var(--color-ink);
+    background: transparent;
+  }
+
+  .resource-search input::placeholder {
+    color: #7d8491;
+  }
+
+  .resource-search:focus-within {
+    border-color: var(--color-brand-blue);
+    box-shadow: 0 0 0 3px rgba(36, 58, 108, 0.13);
+  }
+
+  .resource-search button,
+  .resource-empty button {
+    border: 0;
+    border-radius: 6px;
+    background: var(--color-brand-blue);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .resource-search button {
+    min-height: 46px;
+    padding: 0 24px;
+  }
+
+  .resource-library {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 42px;
+    padding-bottom: 100px;
+  }
+
+  .resource-filters {
+    align-self: start;
+    position: sticky;
+    top: 112px;
+  }
+
+  .filter-topline,
+  .results-heading,
+  .resource-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .filter-topline {
+    min-height: 44px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .filter-topline h2 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .clear-filters {
+    border: 0;
+    background: transparent;
+    color: var(--color-brand-blue);
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .resource-filters fieldset {
+    border: 0;
+    border-bottom: 1px solid var(--color-line);
+    margin: 0;
+    padding: 22px 0;
+  }
+
+  .resource-filters legend {
+    margin-bottom: 13px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-brand-blue);
+  }
+
+  .resource-filters label {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    min-height: 36px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .resource-filters input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-brand-blue);
+  }
+
+  .resource-filters small {
+    min-width: 25px;
+    border-radius: 999px;
+    padding: 2px 6px;
+    background: #edf2fa;
+    color: var(--color-muted);
+    text-align: center;
+    font-size: 10px;
+  }
+
+  .results-heading {
+    min-height: 44px;
+    margin-bottom: 20px;
+  }
+
+  .results-heading p {
+    font-size: 12px;
+    color: var(--color-muted);
+  }
+
+  .results-note {
+    text-align: right;
+  }
+
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px 20px;
+  }
+
+  .resource-card {
+    min-width: 0;
+  }
+
+  .resource-card[hidden] {
+    display: none;
+  }
+
+  .resource-card > a {
+    display: block;
+    height: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .resource-card > a:hover {
+    color: inherit;
+    border-color: #b9c5d8;
+    box-shadow: 0 14px 36px rgba(36, 58, 108, 0.1);
+    transform: translateY(-3px);
+  }
+
+  .resource-art {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 72% 34%, rgba(231, 117, 57, 0.88) 0 12%, transparent 12.5%),
+      radial-gradient(circle at 28% 68%, rgba(255, 255, 255, 0.16) 0 17%, transparent 17.5%),
+      linear-gradient(135deg, #1d315f, #2d4d8c);
+  }
+
+  .resource-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .resource-art.has-image img[src*="infographics"] {
+    object-position: top;
+  }
+
+  .art-orbit {
+    position: absolute;
+    width: 58%;
+    aspect-ratio: 1;
+    right: -12%;
+    top: -28%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+  }
+
+  .art-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.22;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .resource-art strong {
+    position: absolute;
+    left: 22px;
+    bottom: 18px;
+    color: #fff;
+    font-size: 24px;
+    letter-spacing: -0.04em;
+  }
+
+  .resource-card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 250px;
+    padding: 19px 19px 18px;
+  }
+
+  .resource-meta {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-brand-blue);
+  }
+
+  .resource-meta span + span::before {
+    content: "";
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    margin: 0 8px 2px 0;
+    border-radius: 50%;
+    background: var(--color-action);
+  }
+
+  .resource-card h2 {
+    margin-top: 13px;
+    font-size: 20px;
+    line-height: 1.22;
+    letter-spacing: -0.028em;
+    font-weight: 700;
+  }
+
+  .resource-card p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 12px;
+    color: var(--color-muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .resource-action {
+    margin-top: auto;
+    padding-top: 20px;
+    color: var(--color-brand-blue);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .resource-empty {
+    min-height: 360px;
+    padding: 70px 32px;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    background: #f7f9fc;
+    text-align: center;
+  }
+
+  .resource-empty[hidden] {
+    display: none;
+  }
+
+  .resource-empty h2 {
+    margin-top: 10px;
+    font-size: 32px;
+  }
+
+  .resource-empty > p:not(.eyebrow) {
+    margin: 14px auto 0;
+    color: var(--color-muted);
+  }
+
+  .resource-empty button {
+    margin-top: 24px;
+    padding: 13px 18px;
+  }
+
+  .resource-cta {
+    background: #f4f7fb;
+  }
+
+  .resource-cta-inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px;
+    padding-block: 78px;
+  }
+
+  .resource-cta h2 {
+    margin-top: 14px;
+    max-width: 18ch;
+    font-size: clamp(34px, 4vw, 48px);
+  }
+
+  .resource-cta-inner > div:last-child > p {
+    color: var(--color-muted);
+  }
+
+  .resource-cta :global(.button) {
+    margin-top: 24px;
+  }
+
+  @media (max-width: 1050px) {
+    .resource-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    .resources-hero {
+      padding-block: 28px 24px;
+      text-align: left;
+    }
+
+    .resources-hero h1 {
+      font-size: 40px;
+    }
+
+    .resources-hero > p:not(.eyebrow) {
+      margin-left: 0;
+      font-size: 16px;
+    }
+
+    .resource-search {
+      grid-template-columns: 30px minmax(0, 1fr);
+      margin-top: 18px;
+      padding: 6px;
+    }
+
+    .resource-search button {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .resource-library {
+      display: block;
+      padding-bottom: 64px;
+    }
+
+    .resource-filters {
+      position: static;
+      display: block;
+      margin-bottom: 20px;
+      padding: 10px 16px 12px;
+      border: 1px solid var(--color-line);
+      border-radius: 8px;
+    }
+
+    .filter-topline {
+      min-height: 38px;
+    }
+
+    .resource-filters fieldset {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 0;
+    }
+
+    .resource-filters legend {
+      width: 100%;
+      margin-bottom: 7px;
+    }
+
+    .resource-filters label {
+      display: inline-flex;
+      min-height: 34px;
+      gap: 7px;
+      padding: 5px 10px;
+      border: 1px solid var(--color-line);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .resource-filters small {
+      display: none;
+    }
+
+    .results-note {
+      display: none;
+    }
+
+    .resource-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .resource-card-body {
+      min-height: 220px;
+    }
+
+    .resource-cta-inner {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding-block: 56px;
+    }
+  }
+
+</style>

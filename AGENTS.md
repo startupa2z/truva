@@ -11,4 +11,4 @@
 - After deployment, verify the deployed commit, homepage, health endpoint, and affected user flows.
 
 ## Single Truva website workspace
-Security Hub is part of this website at `/security-hub`, not a separate product. Canonical local checkout: `/Users/satz/My Drive/3-focus/truva-site`. Continue all basic-page and Security Hub edits here. The former `truva-security-hub-local` worktree is retained only as a historical copy; do not develop there. Read `/Users/satz/myfiles/myproducts/hermes/context/truva/security-hub/handoff.md` for current context.
+Security Hub is part of this website at `/security-hub`, not a separate product. Canonical local checkout: `/Users/satz/t-drive/myfiles/myproducts/truva-site`. Continue all basic-page and Security Hub edits here. The former `truva-security-hub-local` worktree is retained only as a historical copy; do not develop there. Read `/Users/satz/myfiles/myproducts/hermes/context/truva/security-hub/handoff.md` for current context.

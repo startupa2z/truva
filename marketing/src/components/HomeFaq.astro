@@ -1,0 +1,99 @@
+---
+const faqs = [
+  {
+    question: "What does Truva Solutions help with?",
+    answer: "Truva Solutions helps startups and growing SaaS companies assess AI and cloud security risks, fix gaps, and prepare for SOC 2, ISO 27001, and ISO 42001. We agree the priorities with your team and turn findings into practical actions with clear owners.",
+    href: "/services",
+    label: "Explore our services",
+  },
+  {
+    question: "Where should we start if a customer asks for SOC 2?",
+    answer: "Start by confirming what the customer needs, which systems are in scope, and the deadline. A SOC 2 readiness assessment helps identify control gaps, assign owners, and plan evidence collection before the independent examination.",
+    href: "/services/soc-2-readiness",
+    label: "See our SOC 2 readiness assessment",
+  },
+  {
+    question: "Does Truva issue SOC 2 reports or ISO certifications?",
+    answer: "Truva provides readiness, remediation, and audit preparation support. An independent licensed CPA firm performs the SOC 2 examination and issues the report. An independent certification body issues ISO certifications. We help your team prepare the controls and evidence they need to review.",
+  },
+  {
+    question: "What is included in an AI security assessment?",
+    answer: "An AI security assessment reviews an agreed application or agent workflow, including the data it can access, its connections and permissions, and how it handles untrusted input. Truva documents the findings and recommends fixes based on the impact on your business. Test access, exclusions, and deliverables are agreed before work begins.",
+    href: "/services/ai-security-assessment",
+    label: "See our AI security assessment",
+  },
+  {
+    question: "Can Truva review our existing cloud environment and security tools?",
+    answer: "Yes. Truva can assess an agreed set of AWS, Azure, or Google Cloud accounts and review findings from the tools your team already uses. We look at exposure, identities, permissions, and data protection in context, then help you prioritize the work. Any changes or retesting are agreed in the engagement scope.",
+    href: "/services/cloud-security-assessment",
+    label: "See our cloud security assessment",
+  },
+  {
+    question: "How long does an engagement take, and what does it cost?",
+    answer: "The schedule and fee depend on the systems in scope, the access available, and the work you need. We confirm the scope, deliverables, dates, and fee in a written proposal. Readiness assessment dates are separate from remediation, a SOC 2 observation period, and the independent audit schedule.",
+  },
+  {
+    question: "What happens during the free consultation?",
+    answer: "The first call is a free 30-minute conversation about what you are building, the security or compliance question in front of you, and any customer deadlines. We use that context to discuss a useful next step. You do not need to commit to an engagement on the call.",
+    href: "#consult",
+    label: "Book a consultation",
+  },
+];
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://truvasolutions.com/#faq",
+  mainEntity: faqs.map(({ question, answer }) => ({
+    "@type": "Question",
+    name: question,
+    acceptedAnswer: { "@type": "Answer", text: answer },
+  })),
+};
+---
+
+<section id="faq" class="home-faq section shell section-border" aria-labelledby="faq-title">
+  <div class="faq-intro">
+    <p class="eyebrow">COMMON QUESTIONS</p>
+    <h2 id="faq-title">Frequently asked questions</h2>
+    <p>Answers to the questions teams ask before working with Truva.</p>
+  </div>
+  <div class="faq-list">
+    {faqs.map((faq, index) => (
+      <details class="faq-item" open={index === 0}>
+        <summary><h3>{faq.question}</h3><span class="faq-toggle" aria-hidden="true"></span></summary>
+        <div class="faq-answer">
+          <p>{faq.answer}</p>
+          {faq.href && <a href={faq.href}>{faq.label}</a>}
+        </div>
+      </details>
+    ))}
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, "\\u003c")} />
+</section>
+
+<style>
+  .home-faq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr); gap: 64px; }
+  .faq-intro h2 { margin-top: 16px; font-size: clamp(28px, 3vw, 38px); line-height: 1.15; letter-spacing: -.035em; }
+  .faq-intro > p:last-child { max-width: 32ch; margin-top: 20px; color: var(--color-muted); font-size: 16px; line-height: 1.65; }
+  .faq-item { border-bottom: 1px solid var(--color-line); }
+  .faq-item:first-child { border-top: 1px solid var(--color-line); }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 0; cursor: pointer; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary h3 { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.45; letter-spacing: -.015em; }
+  summary:focus-visible { outline: 2px solid var(--color-brand-blue); outline-offset: 4px; border-radius: 3px; }
+  .faq-toggle { position: relative; flex: 0 0 24px; width: 24px; height: 24px; color: var(--color-brand-blue); }
+  .faq-toggle::before, .faq-toggle::after { content: ""; position: absolute; background: currentColor; border-radius: 1px; }
+  .faq-toggle::before { width: 12px; height: 2px; top: 11px; left: 6px; }
+  .faq-toggle::after { width: 2px; height: 12px; top: 6px; left: 11px; }
+  details[open] .faq-toggle::after { display: none; }
+  .faq-answer { padding: 0 36px 24px 0; }
+  .faq-answer p { margin: 0; color: var(--color-muted); font-size: 16px; line-height: 1.75; }
+  .faq-answer a { display: inline-block; margin-top: 14px; color: var(--color-brand-blue); font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 767px) {
+    .home-faq { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .faq-intro > p:last-child { max-width: 42ch; margin-top: 14px; }
+    summary { gap: 16px; padding: 20px 0; }
+    summary h3 { font-size: 16px; }
+    .faq-answer { padding-right: 0; }
+  }
+</style>

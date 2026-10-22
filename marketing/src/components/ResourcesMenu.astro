@@ -1,0 +1,24 @@
+---
+const isCurrent = Astro.url.pathname.startsWith("/resources");
+---
+
+<details class="services-menu resources-menu">
+  <summary aria-current={isCurrent ? "page" : undefined}>
+    Resources{" "}
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="m3 4.5 3 3 3-3" stroke="currentColor" stroke-width="1.5" />
+    </svg>
+  </summary>
+  <div class="services-dropdown">
+    <a href="/resources?type=Blog">Blog</a>
+    <a href="/resources?type=White%20Paper">White Paper</a>
+    <a href="/resources?type=Case%20Study">Case Study</a>
+    <a href="/resources?type=Events">Events</a>
+  </div>
+</details>

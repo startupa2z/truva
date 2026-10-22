@@ -3,20 +3,19 @@ import { site } from "../data/site";
 import AboutMenu from "./AboutMenu.astro";
 import Brand from "./Brand.astro";
 import BookingLink from "./BookingLink.astro";
+import ResourcesMenu from "./ResourcesMenu.astro";
 import ServicesMenu from "./ServicesMenu.astro";
 
 interface Props {
   showBooking?: boolean;
-  pageTitle?: string;
 }
 
-const { showBooking = true, pageTitle } = Astro.props;
+const { showBooking = true } = Astro.props;
 ---
 
-<header class:list={["site-header", { "compact-page-header": pageTitle }]}>
+<header class="site-header">
   <div class="shell header-inner">
     <Brand />
-    {pageTitle && <h1 class="header-page-title">{pageTitle}</h1>}
     <nav class="desktop-nav" aria-label="Main navigation">
       <a
         href="/"
@@ -30,10 +29,13 @@ const { showBooking = true, pageTitle } = Astro.props;
       >
         Security Hub
       </a>
+      <ResourcesMenu />
       <ServicesMenu />
       <AboutMenu />
     </nav>
-    {showBooking && <BookingLink label="Book a consult" small />}
+    <div class="header-actions">
+      {showBooking && <BookingLink label="Book a consult" small />}
+    </div>
     <details class="mobile-nav">
       <summary aria-label="Navigation menu">
         <span></span>
@@ -52,6 +54,7 @@ const { showBooking = true, pageTitle } = Astro.props;
         >
           Security Hub
         </a>
+        <ResourcesMenu />
         <ServicesMenu />
         <AboutMenu />
           {showBooking && <a href={site.bookingUrl || "/#consult"}>Book a consult</a>}
@@ -97,13 +100,3 @@ const { showBooking = true, pageTitle } = Astro.props;
     }
   });
 </script>
-
-<style>
-  .compact-page-header .header-inner { height: 64px; gap: 24px; }
-  .header-page-title { font-size: 22px; line-height: 1.2; margin: 0 auto 0 0; white-space: nowrap; }
-  @media (max-width: 767px) {
-    .compact-page-header .header-inner { height: 60px; gap: 12px; }
-    .header-page-title { font-size: 18px; }
-    .compact-page-header :global(.brand-name) { display: none; }
-  }
-</style>

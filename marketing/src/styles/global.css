@@ -177,10 +177,13 @@ a:hover {
 }
 .header-inner {
   height: 91px;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
+}
+.header-inner > .brand {
+  justify-self: start;
 }
 .brand {
   display: inline-flex;
@@ -206,12 +209,19 @@ a:hover {
   display: flex;
   gap: 30px;
   font-size: 13px;
+  align-items: center;
+  justify-self: center;
 }
 .desktop-nav a {
   padding: 12px 0;
 }
 .mobile-nav {
   display: none;
+}
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  justify-self: stretch;
 }
 .hero {
   display: grid;
@@ -721,6 +731,7 @@ a:hover {
   }
   .header-inner {
     height: 76px;
+    display: flex;
     gap: 14px;
   }
   .brand-name {
@@ -736,14 +747,17 @@ a:hover {
   .desktop-nav {
     display: none;
   }
-  .header-inner > .button {
+  .header-actions {
     margin-left: auto;
+    justify-content: flex-end;
+  }
+  .header-actions > .button {
     font-size: 11px;
     padding: 11px 12px;
     gap: 8px;
     min-height: 42px;
   }
-  .header-inner > .button .arrow {
+  .header-actions > .button .arrow {
     width: 15px;
   }
   .mobile-nav {
@@ -1238,6 +1252,7 @@ a:hover {
 .header-inner { height: 64px; }
 .desktop-nav { gap: 24px; }
 .desktop-nav a[aria-current="page"] { color: var(--color-brand-blue); font-weight: 700; }
+.desktop-nav summary[aria-current="page"] { color: var(--color-brand-blue); font-weight: 700; }
 h1 { font-size: clamp(34px, 4vw, 52px); line-height: 1.12; letter-spacing: -.04em; }
 h2 { font-size: clamp(25px, 2.7vw, 34px); line-height: 1.2; font-weight: 600; }
 h3 { font-size: 21px; font-weight: 600; }

@@ -39,7 +39,7 @@ export const risks = [
     tag: "VISIBILITY",
     short: "Untracked AI use",
     source: sources.inventory,
-    body: "A useful experiment can become a business dependency before anyone assigns an owner. Without an inventory, your team cannot reliably review the data, vendors, and permissions involved.",
+    body: "A useful experiment can become critical before anyone owns it. Without a list of AI use cases, your team cannot reliably review the data, vendors, or permissions involved.",
     example:
       "A team uses a personal AI account to summarize internal documents. Procurement and security have no record of it.",
     actions: [
@@ -50,11 +50,11 @@ export const risks = [
   },
   {
     id: "data-leakage",
-    title: "Sensitive data crossing the wrong boundary",
+    title: "Sensitive data going where it should not",
     tag: "DATA",
     short: "Data leakage",
     source: sources.data,
-    body: "Sensitive information can travel through prompts, retrieved documents, outputs, and logs. A private deployment still needs access controls; a provider’s training policy alone does not settle every data-handling question.",
+    body: "Sensitive information can appear in prompts, retrieved documents, outputs, and logs. Even a private setup needs access controls and clear rules for retention and deletion.",
     example:
       "A support assistant includes another customer’s account details in an otherwise helpful answer.",
     actions: [
@@ -66,11 +66,11 @@ export const risks = [
   },
   {
     id: "exposed-apis",
-    title: "AI endpoints with weak access controls",
+    title: "AI APIs with weak access controls",
     tag: "APPLICATIONS",
     short: "Exposed AI APIs",
     source: sources.api,
-    body: "An AI feature is still an application. Missing authentication, weak object-level authorization, exposed debugging, and unrestricted requests can turn it into a path to private records or unexpected spend.",
+    body: "An AI feature needs the same protections as any other application. Weak login checks, tenant boundaries, or rate limits can expose private records or create unexpected costs.",
     example:
       "A logged-in user changes a document identifier and receives a summary of another tenant’s file.",
     actions: [
@@ -82,11 +82,11 @@ export const risks = [
   },
   {
     id: "permissions",
-    title: "Agents with more access than they need",
+    title: "Agents with too much access",
     tag: "IDENTITY",
-    short: "Overprivileged agents",
+    short: "Too much agent access",
     source: sources.agency,
-    body: "The permissions behind an agent determine how far a mistake can spread. A read-only research task rarely needs write access across the entire workspace.",
+    body: "An agent can cause only as much damage as its permissions allow. A research assistant rarely needs write access across the entire workspace.",
     example:
       "An assistant that finds invoices also has permission to change supplier payment details.",
     actions: [
@@ -98,11 +98,11 @@ export const risks = [
   },
   {
     id: "prompt-injection",
-    title: "Untrusted content giving the AI instructions",
+    title: "Outside content telling AI what to do",
     tag: "INPUTS",
     short: "Prompt injection",
     source: sources.injection,
-    body: "A webpage, email, or retrieved file can contain instructions designed to redirect an AI system. Retrieval and a stronger system prompt do not eliminate this risk. Treat external content as data, not permission to act.",
+    body: "A webpage, email, or file can contain instructions that try to redirect an AI system. Treat outside content as data, never as permission to act.",
     example:
       "An assistant reads a document that tells it to send internal information to an external address.",
     actions: [
@@ -114,11 +114,11 @@ export const risks = [
   },
   {
     id: "supply-chain",
-    title: "Dependencies you have not verified",
+    title: "Tools and models you have not checked",
     tag: "SUPPLY CHAIN",
-    short: "Untrusted dependencies",
+    short: "Unchecked dependencies",
     source: sources.supply,
-    body: "AI depends on more than a model name. Packages, model files, adapters, datasets, and external tools can introduce compromised code or unreviewed behavior. Popularity is not a security review.",
+    body: "AI systems rely on packages, models, datasets, and external tools. Any of them can add unreviewed code or behavior. Popularity is not proof of safety.",
     example:
       "A team pulls a model helper from an unverified repository and runs its setup code in an environment with production credentials.",
     actions: [
@@ -130,9 +130,9 @@ export const risks = [
   },
   {
     id: "retrieval",
-    title: "Retrieval that ignores document permissions",
+    title: "Search that ignores document permissions",
     tag: "KNOWLEDGE",
-    short: "RAG access gaps",
+    short: "Search access gaps",
     source: sources.retrieval,
     body: "Retrieval-augmented generation (RAG) adds company knowledge to a model’s context. If the retrieval layer ignores permissions, a helpful answer can expose information its user could never open directly.",
     example:
@@ -146,11 +146,11 @@ export const risks = [
   },
   {
     id: "autonomy",
-    title: "Actions without a meaningful approval step",
+    title: "AI actions without human approval",
     tag: "ACTIONS",
-    short: "Unchecked autonomy",
+    short: "Actions without approval",
     source: sources.agency,
-    body: "Even a correctly scoped agent can make a harmful decision within its allowed permissions. Choosing when it may act is a separate control from choosing what it can access.",
+    body: "Access limits are not enough. Even within approved permissions, an agent can take the wrong action. Decide when a person must review and approve what happens next.",
     example:
       "An agent sends a customer-facing commitment before a person has reviewed the recipient and exact wording.",
     actions: [
@@ -162,11 +162,11 @@ export const risks = [
   },
   {
     id: "monitoring",
-    title: "Activity you cannot reconstruct",
+    title: "Activity you cannot trace",
     tag: "OPERATIONS",
-    short: "Monitoring blind spots",
+    short: "Missing activity records",
     source: sources.governance,
-    body: "A successful HTTP response says little about whether an AI workflow behaved safely. Teams need enough context to investigate which model, identity, tools, and approvals were involved—without creating a new sensitive-data repository.",
+    body: "A successful request does not prove an AI workflow behaved safely. Keep enough context to see which model, identity, tools, and approvals were involved without creating a new store of sensitive data.",
     example:
       "A customer reports an unauthorized change, but the team cannot connect it to an agent run or tool call.",
     actions: [
@@ -178,11 +178,11 @@ export const risks = [
   },
   {
     id: "governance",
-    title: "Reviews that stop at launch",
+    title: "Security reviews that end at launch",
     tag: "GOVERNANCE",
-    short: "One-time governance",
+    short: "One-time reviews",
     source: sources.governance,
-    body: "Changing a model, connector, prompt, or data source can change the risk of an approved system. Review needs an owner and clear triggers, not just a document signed before launch.",
+    body: "A new model, connector, prompt, or data source can change risk. Review needs an owner and clear triggers after launch, not just a document signed once.",
     example:
       "A previously read-only assistant gains an email-sending tool without a new risk review.",
     actions: [

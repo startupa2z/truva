@@ -1,5 +1,6 @@
 ---
 import CompanySections from "../components/CompanySections.astro";
+import HomeFaq from "../components/HomeFaq.astro";
 import Base from "../layouts/Base.astro";
 import BookingLink from "../components/BookingLink.astro";
 import SiteHeader from "../components/SiteHeader.astro";
@@ -37,7 +38,7 @@ const steps = [
     <section class="hero hero-panel shell" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="eyebrow">
-          <span class="tiny-line"></span> AI SECURITY · CLOUD SECURITY ·
+          AI SECURITY · CLOUD SECURITY ·
           COMPLIANCE
         </p>
         <h1 id="hero-title">
@@ -47,10 +48,9 @@ const steps = [
         </h1>
         <p class="hero-description">
           We find and fix risks across your AI, cloud, and business
-          processes—and help you prepare for SOC&nbsp;2 and ISO audits.
+          processes - and help you prepare for SOC&nbsp;2 and ISO audits.
         </p>
         <BookingLink label="Let’s talk about your security" />
-        <p class="hero-note">Start with a free 30-minute conversation.</p>
       </div>
       <div class="hero-art">
         <SecurityIllustration />
@@ -58,7 +58,7 @@ const steps = [
     </section>
     <section class="logo-preview section-border" aria-label="Tools and frameworks">
       <div class="shell">
-          <div class="logo-preview-heading"><span class="eyebrow">TOOLS &amp; FRAMEWORKS</span><span>Independent technology and standards coverage</span></div>
+          <div class="logo-preview-heading"><span class="eyebrow">TOOLS &amp; FRAMEWORKS</span></div>
           <div class="logo-preview-grid">
             <div class="tool-logo"><img src="/images/tools/wiz.svg" alt="Wiz" width="90" height="42" /><span>Cloud security</span></div>
             <div class="tool-logo"><img src="/images/tools/prowler.png" alt="Prowler" width="132" height="42" /><span>Cloud assessment</span></div>
@@ -167,6 +167,7 @@ const steps = [
         ))}
       </div>
     </section>
+    <HomeFaq />
     <section class="closing-cta" aria-labelledby="closing-title">
       <div class="shell closing-inner">
         <div>
@@ -225,7 +226,6 @@ const steps = [
 <style>
 .logo-preview { padding-block: 24px 28px; }
 .logo-preview-heading { display:flex; justify-content:space-between; gap:16px; align-items:center; }
-.logo-preview-heading > span:last-child { font-size:11px; color:var(--color-muted); }
 .logo-preview-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:16px; align-items:center; margin-top:24px; }
 .tool-logo, .framework-mark { display:grid; grid-template-rows:40px 16px; gap:6px; justify-items:center; align-items:center; min-width:0; text-align:center; color:var(--color-brand-blue); }
 .tool-logo img { display:block; object-fit:contain; filter:brightness(0) saturate(100%); max-width:100%; }
@@ -234,5 +234,5 @@ const steps = [
 .tool-logo img[alt="Orca Security"] { width:84px; height:32px; }
 .framework-mark strong { font-size:20px; line-height:1; letter-spacing:-.04em; white-space:nowrap; }
 .tool-logo span, .framework-mark span { display:block; font-size:10px; line-height:16px; color:var(--color-muted); margin:0; white-space:nowrap; }
-@media(max-width:767px) { .logo-preview-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px 12px; } .logo-preview-heading { display:block; } .logo-preview-heading > span:last-child { display:block; margin-top:6px; } .framework-mark strong { font-size:17px; } }
+@media(max-width:767px) { .logo-preview-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px 12px; } .logo-preview-heading { display:block; } .framework-mark strong { font-size:17px; } }
 </style>

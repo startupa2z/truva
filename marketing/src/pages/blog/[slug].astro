@@ -2,7 +2,6 @@
 import Base from "../../layouts/Base.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
-import BlogCommunity from "../../components/BlogCommunity.astro";
 import TopTenInfographic from "../../components/TopTenInfographic.astro";
 import BookingLink from "../../components/BookingLink.astro";
 import { series } from "../../data/security-series";
@@ -45,7 +44,6 @@ const { article } = Astro.props;
               {String(i + 1).padStart(2, "0")} / {item.title}
             </a>
           ))}
-          <a href="#discussion-title">Discussion</a>
         </nav>
       </aside>
       <article class="series-body">
@@ -79,6 +77,11 @@ const { article } = Astro.props;
             complete security or compliance.
           </p>
           <BookingLink label="Discuss a security assessment" />
+          <p class="related-service">
+            <a href={article.category === "CLOUD SECURITY" ? "/services/cloud-security-assessment" : "/services/ai-security-assessment"}>
+              See what the focused assessment covers
+            </a>
+          </p>
         </section>
         {article.category === "LLM SECURITY" && (
           <p class="source-note">
@@ -94,7 +97,6 @@ const { article } = Astro.props;
             same license; Truva’s trademarks are excluded.
           </p>
         )}
-        <BlogCommunity />
       </article>
     </div>
   </main>
@@ -199,6 +201,14 @@ const { article } = Astro.props;
   }
   .series-next :global(.button) {
     margin-top: 22px;
+  }
+  .related-service a {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--color-brand-blue);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .source-note {
     font-size: 12px;
