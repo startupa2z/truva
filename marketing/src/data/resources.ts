@@ -77,6 +77,18 @@ const weekCollection: ResourceItem = {
 
 export const resources: ResourceItem[] = [
   {
+    title: "PHP2Shell: the problem and the fix",
+    description:
+      "The latest PHP security incident explained simply, with fixed versions, practical actions, and primary references.",
+    url: "/blog/php2shell-explained",
+    type: "Blog",
+    topic: "Application Security",
+    image: "/images/php2shell-explained.png",
+    imageAlt:
+      "PHP2Shell explained: the vulnerable website worker and the security update",
+    mark: "PHP SECURITY UPDATE",
+  },
+  {
     title: "Review AI Security Architecture Before It Hardens",
     description:
       "A practical architecture review for AI systems before security decisions become expensive to change.",

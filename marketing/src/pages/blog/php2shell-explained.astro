@@ -1,0 +1,877 @@
+---
+import Base from "../../layouts/Base.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import BookingLink from "../../components/BookingLink.astro";
+const title = "PHP2Shell: What Happened and How to Fix It | Truva Solutions";
+const description =
+  "PHP2Shell explained simply: who is affected, the four fixed PHP versions, what a firewall can and cannot do, and a practical response checklist.";
+const contents = [
+  ["simple-explanation", "The problem, simply"],
+  ["who-is-affected", "Who is affected?"],
+  ["fixed-versions", "Which update do you need?"],
+  ["response-plan", "What to do now"],
+  ["temporary-protection", "If you cannot patch yet"],
+  ["investigation", "Check for a break-in"],
+  ["references", "References"],
+];
+const schema = [
+  {
+    "@type": "BlogPosting",
+    headline: "PHP2Shell: the problem and the fix",
+    description,
+    datePublished: "2026-10-21",
+    dateModified: "2026-10-21",
+    author: {
+      "@type": "Organization",
+      name: "Truva Solutions",
+      url: "https://truvasolutions.com",
+    },
+    publisher: { "@id": "https://truvasolutions.com/#organization" },
+    image: "https://truvasolutions.com/images/php2shell-explained.png",
+    mainEntityOfPage: "https://truvasolutions.com/blog/php2shell-explained",
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  extraSchema={schema}
+  ogImage="/images/php2shell-explained.png"
+  ogImageAlt="PHP2Shell explained: a web request, vulnerable PHP worker, and the update that fixes it"
+  ogType="article"
+>
+  <SiteHeader />
+  <main id="main" class="php-article">
+    <header class="article-hero shell">
+      <a class="article-back" href="/resources">
+        Back to Resources
+      </a>
+      <p class="eyebrow">APPLICATION SECURITY · EXPLAINED SIMPLY</p>
+      <h1>
+        PHP2Shell: <span>the problem and the fix.</span>
+      </h1>
+      <p class="article-deck">
+        A visitor should be able to ask your website a question. They should
+        never be able to take over the computer behind it. Two newly disclosed
+        PHP flaws can cross that boundary.
+      </p>
+      <div class="article-meta">
+        <span>Truva Solutions</span>
+        <span>6 min read</span>
+        <time datetime="2026-10-21">21 October 2026</time>
+      </div>
+      <p class="update-note">
+        Checked against primary advisories on 21 October 2026. This is a
+        developing incident; check your software vendor for newer updates.
+      </p>
+    </header>
+    <div class="article-layout shell">
+      <article class="article-body" aria-label="PHP2Shell explained">
+        <figure class="lead-visual">
+          <img
+            src="/images/php2shell-explained.svg"
+            width="1200"
+            height="675"
+            alt="A web visitor sends a request to a vulnerable PHP worker. Updating PHP repairs the worker before requests are processed."
+            fetchpriority="high"
+          />
+          <figcaption>
+            The flaw is inside PHP, the software doing the work behind a
+            website.
+          </figcaption>
+        </figure>
+        <details class="mobile-contents">
+          <summary>Table of contents</summary>
+          <nav aria-label="Mobile table of contents">
+            {contents.map(([id, label], i) => (
+              <a href={`#${id}`}>
+                {i + 1}. {label}
+              </a>
+            ))}
+          </nav>
+        </details>
+        <div class="takeaway">
+          <strong>The short answer</strong>
+          <p>
+            Find every PHP web server, install the security update, and restart
+            the workers that handle web requests. A website firewall can help
+            while you patch. It does not repair PHP.
+          </p>
+        </div>
+        <div class="fact-strip" aria-label="Verified facts at a glance">
+          <div>
+            <strong>2</strong>
+            <span>critical vulnerabilities</span>
+          </div>
+          <div>
+            <strong>9.2 / 10</strong>
+            <span>CVSS v4.0 score for each</span>
+          </div>
+          <div>
+            <strong>4</strong>
+            <span>supported PHP branches patched</span>
+          </div>
+        </div>
+        <p class="fact-source">
+          CVSS describes severity, not the chance of an attack. Release and
+          severity sources: PHP maintainers and NHS England.{" "}
+          <a href="#references" aria-label="See primary references">
+            References
+          </a>
+        </p>
+        <section id="simple-explanation">
+          <h2>1. The problem, simply</h2>
+          <p>
+            Imagine a little shop. A customer asks for a sandwich. A helper
+            reads the order, makes the sandwich, and clears the counter for the
+            next customer.
+          </p>
+          <p>
+            For many websites, PHP is that helper. It reads requests, runs the
+            website’s code, and helps return a page.
+          </p>
+          <p>
+            These two bugs affect how the helper manages its work and clears up
+            after something goes wrong. A carefully made request can leave PHP
+            using unfinished information or information it should have thrown
+            away.
+          </p>
+          <p>
+            <strong>The dangerous result:</strong> someone outside the website
+            may be able to make the server run their code. Security teams call
+            this <strong>remote code execution</strong>, or RCE. It can put the
+            data and permissions available to that PHP process at risk.
+          </p>
+          <div class="plain-note">
+            <strong>The fix in the shop example</strong>
+            <p>
+              Give the helper a corrected set of working instructions. In a real
+              system, that means updating PHP itself. Changing the shop’s sign,
+              website theme, or login password does not fix this flaw.
+            </p>
+          </div>
+        </section>
+        <section id="who-is-affected">
+          <h2>2. Who is affected?</h2>
+          <p>
+            PHP’s maintainers warn about installations serving web requests,
+            including PHP-FPM, Apache with mod_php, php-cgi, FrankenPHP, and
+            LiteSpeed. They identify{" "}
+            <strong>mod_php as the highest-risk setup</strong>, with a
+            demonstrated attack that can trigger before the website’s own code
+            runs.
+          </p>
+          <p>
+            Check websites built with WordPress, Drupal, Joomla, Laravel, and
+            other PHP software. Their presence is a reason to check the
+            underlying PHP runtime, not proof that a particular website has been
+            hacked.
+          </p>
+          <div
+            class="table-scroll"
+            role="region"
+            tabindex="0"
+            aria-label="The two PHP2Shell vulnerabilities"
+          >
+            <table>
+              <caption>
+                Two different bugs, with the same urgent update action
+              </caption>
+              <thead>
+                <tr>
+                  <th>Vulnerability</th>
+                  <th>What goes wrong</th>
+                  <th>Plain meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>CVE-2026-109618</strong>
+                    <br />
+                    Out-of-memory corruption
+                  </td>
+                  <td>
+                    PHP may stop before request data is fully prepared, then use
+                    that unfinished data during cleanup.
+                  </td>
+                  <td>
+                    The helper clears a half-finished order as though it were
+                    ready.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>CVE-2026-109619</strong>
+                    <br />
+                    Stale global state
+                  </td>
+                  <td>
+                    PHP may keep a reference to request memory after that memory
+                    has been released.
+                  </td>
+                  <td>
+                    The helper follows an old note that should have been
+                    discarded.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Attack activity is already being reported. Cloudflare says it
+            observed traffic targeting its customers. AWS reports an attempt
+            against its MadPot sensors on <strong>17 October</strong>, before
+            public disclosure. That observation does not establish that the
+            attempt succeeded against a real customer system.
+          </p>
+        </section>
+        <section id="fixed-versions">
+          <h2>3. Which update do you need?</h2>
+          <p>
+            Use the fixed release for your supported PHP branch, or a newer
+            supported security release. If your Linux or hosting vendor
+            backports fixes, check its advisory and patched package build
+            instead of judging safety from the upstream version number alone.
+          </p>
+          <div
+            class="table-scroll"
+            role="region"
+            tabindex="0"
+            aria-label="PHP2Shell fixed versions"
+          >
+            <table>
+              <caption>Upstream releases that fix both vulnerabilities</caption>
+              <thead>
+                <tr>
+                  <th>Your PHP branch</th>
+                  <th>First fixed release</th>
+                  <th>What to do</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>PHP 8.5</td>
+                  <td>
+                    <strong>8.5.12</strong>
+                  </td>
+                  <td>Update to this release or newer.</td>
+                </tr>
+                <tr>
+                  <td>PHP 8.4</td>
+                  <td>
+                    <strong>8.4.27</strong>
+                  </td>
+                  <td>Update to this release or newer.</td>
+                </tr>
+                <tr>
+                  <td>PHP 8.3</td>
+                  <td>
+                    <strong>8.3.36</strong>
+                  </td>
+                  <td>Update to this release or newer.</td>
+                </tr>
+                <tr>
+                  <td>PHP 8.2</td>
+                  <td>
+                    <strong>8.2.35</strong>
+                  </td>
+                  <td>Update now and plan the next supported branch.</td>
+                </tr>
+                <tr>
+                  <td>PHP 8.1 and older</td>
+                  <td>No routine upstream support</td>
+                  <td>
+                    Move to a supported branch, or obtain a confirmed fix from
+                    your support vendor.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <strong>Do not stop at “WordPress is up to date.”</strong> Your CMS
+            and PHP have separate updates. Ask your host which PHP build is
+            actually running for the website.
+          </p>
+        </section>
+        <figure class="response-visual">
+          <img
+            src="/images/php2shell-response.svg"
+            width="1200"
+            height="675"
+            loading="lazy"
+            alt="Four steps: find the PHP runtime, update it, restart all workers, and verify both service health and security evidence."
+          />
+          <figcaption>
+            Close the task with evidence from the running service, not only an
+            update command.
+          </figcaption>
+        </figure>
+        <section id="response-plan">
+          <h2>4. What to do now</h2>
+          <p>
+            Give one person responsibility for the response. Include production
+            websites, admin panels, old subdomains, containers, and spare
+            servers that still receive traffic.
+          </p>
+          <div
+            class="table-scroll"
+            role="region"
+            tabindex="0"
+            aria-label="PHP2Shell response ownership and evidence"
+          >
+            <table>
+              <caption>A practical response checklist</caption>
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>Action</th>
+                  <th>Evidence to keep</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>1. Find</strong>
+                  </td>
+                  <td>
+                    The application owner and host identify the PHP runtime,
+                    package source, and every exposed instance.
+                  </td>
+                  <td>A list of affected services with a named owner.</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>2. Update</strong>
+                  </td>
+                  <td>
+                    The platform team installs a verified patched package or
+                    rebuilds the container image.
+                  </td>
+                  <td>
+                    The vendor advisory and installed package or image
+                    identifier.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>3. Restart</strong>
+                  </td>
+                  <td>
+                    Replace or restart every affected PHP worker. Use a
+                    controlled rollout for busy services.
+                  </td>
+                  <td>
+                    Confirmation that old workers and old containers are gone.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>4. Verify</strong>
+                  </td>
+                  <td>
+                    Check the runtime serving the website, test key user
+                    journeys, and review security signals.
+                  </td>
+                  <td>
+                    Runtime build, test results, and the reviewed log window.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <code>php -v</code> can help identify the command-line version.{" "}
+            <strong>
+              It does not prove the website uses that same PHP build.
+            </strong>{" "}
+            Confirm the web worker or container too. Do not leave a public{" "}
+            <code>phpinfo()</code> page behind as evidence.
+          </p>
+          <p>
+            If a hosting company manages PHP, ask: “Have you patched both CVEs,
+            restarted the affected workers, and checked every PHP site on this
+            account?” Request the package build and completion time.
+          </p>
+        </section>
+        <section id="temporary-protection">
+          <h2>5. If you cannot patch yet</h2>
+          <p>
+            Reduce exposure while arranging the update. Restrict access to the
+            affected service, and consider taking it offline if you cannot make
+            the risk acceptable. Test restrictions against the real application
+            so a rushed change does not break essential functions.
+          </p>
+          <p>
+            A web application firewall, or WAF, is a filter in front of the
+            website. Cloudflare reports default protections for customers using
+            its WAF, including its Free plan.{" "}
+            <strong>
+              Check that traffic actually passes through the protection and
+              cannot reach the origin directly.
+            </strong>{" "}
+            Another provider may have different coverage.
+          </p>
+          <p>
+            PHP’s advisory also lists temporary configuration changes for
+            particular attack paths. These include upload-related settings and
+            worker restarts.{" "}
+            <strong>There is no complete configuration-only fix.</strong> Have
+            the server owner follow the current maintainer advisory for the
+            exact runtime. Avoid copying isolated settings from social media.
+          </p>
+          <div class="plain-note">
+            <strong>A filter buys time. An update repairs the software.</strong>
+            <p>
+              Do not mark the incident resolved just because the WAF blocked
+              some requests.
+            </p>
+          </div>
+        </section>
+        <section id="investigation">
+          <h2>6. Check for a break-in</h2>
+          <p>
+            Patching closes a weakness. It does not remove an attacker who may
+            already be inside.
+          </p>
+          <p>
+            AWS recommends reviewing web logs, unexpected process execution, and
+            file changes. Its earliest reported sensor activity was on 17
+            October, so include that date in your review when retained logs
+            allow. Preserve relevant logs and evidence before rebuilding a
+            suspicious system.
+          </p>
+          <ul>
+            <li>
+              Look for unexpected files, changed application code, and unusual
+              scheduled jobs.
+            </li>
+            <li>
+              Review processes started by the web worker and unexplained
+              outbound connections.
+            </li>
+            <li>
+              If compromise is suspected, isolate the system and involve
+              incident responders. Identify and rotate exposed secrets from a
+              clean environment.
+            </li>
+          </ul>
+          <p>
+            A quiet dashboard is not proof of safety. Record what you checked,
+            what logs were available, and what remains unknown.
+          </p>
+        </section>
+        <section id="references" class="references">
+          <h2>7. References</h2>
+          <p>
+            Primary sources used for this article. Release and protection
+            details can change as the response develops.
+          </p>
+          <ol>
+            <li>
+              <a href="https://www.php.net/archive/2026.php#2026-10-21-5">
+                PHP: critical security advisory and fixed releases, 21 October
+                2026
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">
+                PHP maintainer advisory: CVE-2026-109618
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">
+                PHP maintainer advisory: CVE-2026-109619
+              </a>
+            </li>
+            <li>
+              <a href="https://blog.cloudflare.com/php-vulnerabilities-waf-protection/">
+                Cloudflare: observed attack traffic and PHP2Shell WAF protection
+              </a>
+            </li>
+            <li>
+              <a href="https://aws.amazon.com/blogs/security/amazon-threat-intelligence-identifies-php2shell-exploitation-prior-to-public-disclosure-in-madpot/">
+                AWS: PHP2Shell activity observed in MadPot telemetry
+              </a>
+            </li>
+            <li>
+              <a href="https://digital.nhs.uk/cyber-alerts/2026/cc-4875">
+                NHS England: affected versions, severity scores, and remediation
+              </a>
+            </li>
+          </ol>
+        </section>
+        <section class="article-next">
+          <h2>Know what is exposed. Prove what is fixed.</h2>
+          <p>
+            Truva helps teams review application exposure and turn security
+            findings into a clear remediation plan.
+          </p>
+          <BookingLink label="Discuss your application security" />
+        </section>
+      </article>
+      <aside class="article-sidebar">
+        <nav aria-label="Table of contents">
+          <p class="eyebrow">TABLE OF CONTENTS</p>
+          {contents.map(([id, label], i) => (
+            <a href={`#${id}`}>
+              <span>{i + 1}</span>
+              {label}
+            </a>
+          ))}
+        </nav>
+      </aside>
+    </div>
+  </main>
+  <SiteFooter />
+</Base>
+<style>
+  .mobile-contents {
+    display: none;
+  }
+  .mobile-contents summary {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-brand-blue);
+    cursor: pointer;
+  }
+  .mobile-contents a {
+    display: block;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 5px 0;
+  }
+  .mobile-contents nav {
+    padding-top: 12px;
+  }
+  .article-hero {
+    padding-block: 28px 24px;
+  }
+  .article-back {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-brand-blue);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(30px, 3.7vw, 47px);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    margin: 16px 0 20px;
+  }
+  h1 span {
+    color: var(--color-brand-blue);
+  }
+  .article-deck {
+    font-size: 19px;
+    line-height: 1.6;
+    max-width: 850px;
+    color: var(--color-muted);
+  }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    font-size: 12px;
+    color: var(--color-muted);
+    margin: 20px 0 12px;
+  }
+  .update-note {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    max-width: 850px;
+  }
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 780px) 280px;
+    gap: 44px;
+    align-items: start;
+    justify-content: space-between;
+    padding-block: 10px 64px;
+  }
+  .article-body {
+    min-width: 0;
+  }
+  .article-body section {
+    scroll-margin-top: 90px;
+    margin-top: 42px;
+  }
+  .article-body h2 {
+    font-size: clamp(23px, 2.3vw, 29px);
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    margin-bottom: 18px;
+  }
+  .article-body p,
+  .article-body li {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .article-body p + p {
+    margin-top: 16px;
+  }
+  .article-body strong {
+    font-weight: 700;
+  }
+  .article-body ul,
+  .references ol {
+    padding-left: 22px;
+    margin-top: 14px;
+  }
+  .article-body li + li {
+    margin-top: 10px;
+  }
+  .article-body code {
+    font-size: 0.9em;
+    background: #edf2f9;
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+  .lead-visual img,
+  .response-visual img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    display: block;
+  }
+  .lead-visual figcaption,
+  .response-visual figcaption {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin-top: 10px;
+  }
+  .response-visual {
+    margin-top: 40px;
+  }
+  .takeaway {
+    background: #fff5ed;
+    border-left: 3px solid var(--color-action);
+    padding: 20px 24px;
+    margin-top: 28px;
+  }
+  .takeaway > strong {
+    font-size: 17px;
+  }
+  .takeaway p {
+    margin-top: 7px;
+  }
+  .fact-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--color-line);
+    margin-top: 25px;
+    border-radius: 8px;
+  }
+  .fact-strip > div {
+    padding: 18px 12px;
+    text-align: center;
+  }
+  .fact-strip > div + div {
+    border-left: 1px solid var(--color-line);
+  }
+  .fact-strip strong {
+    display: block;
+    font-size: 27px;
+    color: var(--color-brand-blue);
+    letter-spacing: -0.03em;
+  }
+  .fact-strip span {
+    display: block;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--color-muted);
+    margin-top: 5px;
+  }
+  .article-body .fact-source {
+    font-size: 10px;
+    color: var(--color-muted);
+    margin-top: 9px;
+  }
+  .fact-source a {
+    text-decoration: underline;
+  }
+  .plain-note {
+    padding: 20px 24px;
+    background: #f1f5fb;
+    margin-top: 22px;
+  }
+  .plain-note > strong {
+    color: var(--color-brand-blue);
+  }
+  .plain-note p {
+    margin-top: 7px;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    margin-block: 22px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 520px;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  caption {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 15px 17px;
+    background: #fff5ed;
+    color: #7c3513;
+  }
+  th {
+    background: #eef3fa;
+    font-weight: 700;
+    color: var(--color-brand-blue);
+  }
+  td,
+  th {
+    padding: 14px 16px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-line);
+  }
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  td:first-child {
+    width: 26%;
+  }
+  .article-sidebar {
+    position: sticky;
+    top: 88px;
+  }
+  .article-sidebar nav {
+    border: 1px solid var(--color-line);
+    border-top: 3px solid var(--color-action);
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+  }
+  .article-sidebar .eyebrow {
+    color: var(--color-brand-blue);
+    font-size: 11px;
+    margin-bottom: 15px;
+  }
+  .article-sidebar a {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 8px 0;
+    color: var(--color-muted);
+  }
+  .article-sidebar a span {
+    color: var(--color-brand-blue);
+    font-variant-numeric: tabular-nums;
+    min-width: 12px;
+  }
+  .article-sidebar a:hover,
+  .references a:hover {
+    color: var(--color-brand-blue);
+    text-decoration: underline;
+  }
+  .references {
+    border-top: 1px solid var(--color-line);
+    padding-top: 30px;
+  }
+  .references li,
+  .references p {
+    font-size: 13px;
+  }
+  .references a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .article-next {
+    background: #fff5ed;
+    padding: 26px;
+    border-radius: 8px;
+  }
+  .article-next :global(.btn) {
+    margin-top: 20px;
+  }
+  @media (min-width: 1100px) {
+    h1 {
+      white-space: nowrap;
+    }
+  }
+  @media (max-width: 900px) {
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr) 240px;
+      gap: 24px;
+    }
+    .article-sidebar nav {
+      padding: 17px;
+    }
+    .article-deck {
+      font-size: 17px;
+    }
+  }
+  @media (max-width: 720px) {
+    .article-hero {
+      padding-top: 24px;
+    }
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+    .article-sidebar {
+      display: none;
+    }
+    .mobile-contents {
+      display: block;
+      margin-top: 20px;
+      border: 1px solid var(--color-line);
+      padding: 16px;
+      border-radius: 8px;
+    }
+    .article-sidebar nav {
+      padding: 17px 20px;
+    }
+    .article-sidebar a {
+      padding: 5px 0;
+    }
+    .article-body section {
+      margin-top: 32px;
+    }
+    .article-body p,
+    .article-body li {
+      font-size: 15px;
+    }
+    .fact-strip strong {
+      font-size: 23px;
+    }
+    .fact-strip span {
+      font-size: 10px;
+    }
+    .takeaway,
+    .plain-note {
+      padding: 17px;
+    }
+    .lead-visual figcaption {
+      font-size: 10px;
+    }
+    h1 {
+      font-size: 32px;
+    }
+    .article-back {
+      margin-bottom: 20px;
+    }
+    table {
+      min-width: 510px;
+    }
+  }
+</style>
