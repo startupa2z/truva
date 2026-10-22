@@ -67,3 +67,5 @@ The existing Dockerfile application and its SQLite `/data` volume are the rollba
 10. Switch only the Truva production domain through Coolify. Verify `/health` identifies PostgreSQL and the release revision, and verify the live Resources, service, article, FAQ and booking routes.
 
 Rollback: return the production domain to the prior healthy application and its untouched SQLite volume. Preserve any new PostgreSQL records from the cutover window for later reconciliation; do not overwrite either database with local data.
+
+For the initial SQLite cutover, use `docker-compose.cutover.yml` and set `LEGACY_SQLITE_VOLUME` to the verified old data volume name. This file adds a read-only `/legacy` mount and the snapshot owner group. FastAPI initializes the new schema; no repository-relative PostgreSQL initialization-script mount is needed. After migration and rollback review, future releases may use `docker-compose.prod.yml` with the same application and PostgreSQL volume.

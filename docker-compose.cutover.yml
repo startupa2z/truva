@@ -1,0 +1,60 @@
+# Temporary parallel deployment: read-only legacy snapshot access for migration.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: truva
+      POSTGRES_USER: truva
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U truva -d truva"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        SOURCE_COMMIT: ${SOURCE_COMMIT:-unknown}
+    restart: unless-stopped
+    group_add:
+      - "1000"
+    volumes:
+      - legacy_sqlite:/legacy:ro
+    environment:
+      DATABASE_URL: postgresql://truva:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/truva
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-https://truvasolutions.com}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?set ADMIN_TOKEN}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+
+  legacy_sqlite:
+    external: true
+    name: ${LEGACY_SQLITE_VOLUME:?set LEGACY_SQLITE_VOLUME}
