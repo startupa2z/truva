@@ -250,22 +250,22 @@ def overview(truva_admin: str | None = Cookie(default=None)):
     today = date.today()
     since = today - timedelta(days=29)
     with pool.connection() as connection:
-        connection.row_factory = dict_row
-        visitors_today = connection.execute(
-            "SELECT COUNT(*) AS total FROM visitors WHERE day=%s", (today,)
-        ).fetchone()["total"]
-        visitors_30 = connection.execute(
-            "SELECT COUNT(DISTINCT id) AS total FROM visitors WHERE day >= %s", (since,)
-        ).fetchone()["total"]
-        total_views = connection.execute("SELECT COALESCE(SUM(count), 0) AS total FROM views").fetchone()["total"]
-        pages = connection.execute(
-            "SELECT path, SUM(count) AS views FROM views GROUP BY path ORDER BY views DESC, path"
-        ).fetchall()
-        days = connection.execute(
-            "SELECT v.day, SUM(v.count) AS views, "
-            "(SELECT COUNT(*) FROM visitors x WHERE x.day=v.day) AS visitors "
-            "FROM views v GROUP BY v.day ORDER BY v.day DESC LIMIT 30"
-        ).fetchall()
+        with connection.cursor(row_factory=dict_row) as cursor:
+            visitors_today = cursor.execute(
+                "SELECT COUNT(*) AS total FROM visitors WHERE day=%s", (today,)
+            ).fetchone()["total"]
+            visitors_30 = cursor.execute(
+                "SELECT COUNT(DISTINCT id) AS total FROM visitors WHERE day >= %s", (since,)
+            ).fetchone()["total"]
+            total_views = cursor.execute("SELECT COALESCE(SUM(count), 0) AS total FROM views").fetchone()["total"]
+            pages = cursor.execute(
+                "SELECT path, SUM(count) AS views FROM views GROUP BY path ORDER BY views DESC, path"
+            ).fetchall()
+            days = cursor.execute(
+                "SELECT v.day, SUM(v.count) AS views, "
+                "(SELECT COUNT(*) FROM visitors x WHERE x.day=v.day) AS visitors "
+                "FROM views v GROUP BY v.day ORDER BY v.day DESC LIMIT 30"
+            ).fetchall()
     return {
         "visitorsToday": visitors_today,
         "visitors30Days": visitors_30,
