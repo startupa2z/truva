@@ -77,6 +77,16 @@ const weekCollection: ResourceItem = {
 
 export const resources: ResourceItem[] = [
   {
+    title: "AI agents need more than access. They need enforceable authority.",
+    description: "Agent permissions, exact-action approval and five practical tests before production.",
+    url: "/blog/ai-agents-enforceable-authority",
+    type: "Blog",
+    topic: "AI Security",
+    image: "/images/yahoo-finance-agent-access-social.jpg",
+    imageAlt: "Yahoo Finance Market Domination Overtime screenshot: two speakers discuss banks restricting third-party AI agents; the original title and lower-third banner remain visible.",
+    mark: "AI SECURITY",
+  },
+  {
     title: "PHP2Shell: the problem and the fix",
     description:
       "The latest PHP security incident explained simply, with fixed versions, practical actions, and primary references.",

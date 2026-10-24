@@ -1,0 +1,24 @@
+---
+import { site } from "../data/site";
+const label = site.preview ? "local preview views" : "views";
+---
+<span data-article-views data-view-label={label} title={site.preview ? "Local review traffic only; not production readership. Refreshes in the same session are deduplicated for 30 minutes." : "Page views; refreshes in the same session are deduplicated for 30 minutes."} aria-live="polite">{site.preview ? "Local preview views unavailable" : "Views unavailable"}</span>
+<script>
+  const counters = document.querySelectorAll<HTMLElement>("[data-article-views]");
+  let latest = -1;
+  function display(value: unknown) {
+    if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return;
+    latest = Math.max(latest, value);
+    counters.forEach((counter) => {
+      counter.textContent = `${counter.dataset.viewLabel}: ${latest.toLocaleString()}`;
+    });
+  }
+  window.addEventListener("truva-view", (event) => {
+    display((event as CustomEvent<{ views: unknown }>).detail?.views);
+  });
+  const path = location.pathname.replace(/\/$/, "") || "/";
+  fetch(`/api/views?${new URLSearchParams({ path })}`, { cache: "no-store" })
+    .then((response) => { if (!response.ok) throw Error("Unavailable"); return response.json(); })
+    .then((data) => display(data.views))
+    .catch(() => { /* Keep the truthful unavailable state, never invent a count. */ });
+</script>

@@ -1,0 +1,430 @@
+---
+import Base from "../../layouts/Base.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import BookingLink from "../../components/BookingLink.astro";
+import ArticleViewCount from "../../components/ArticleViewCount.astro";
+import { site } from "../../data/site";
+const title = "AI agents need more than access. They need enforceable authority.";
+const description = "What the banking debate reveals about AI-agent permissions, exact-action approval and practical tests before granting production access.";
+const contents = [['reported', 'What was actually reported?'], ['authority', 'Three different permissions'], ['failure', 'How excessive agency creates risk'], ['controls', 'Put authority into the system'], ['tests', 'Five tests before production'], ['week', 'A practical first-week plan'], ['references', 'References']];
+---
+<Base title={`${title} | Truva Solutions`} description={description} ogImage="/images/yahoo-finance-agent-access-social.jpg" ogImageAlt="Yahoo Finance Market Domination Overtime screenshot: two speakers discuss banks restricting third-party AI agents; the original title and lower-third banner remain visible." ogType="article" ogImageWidth={648} ogImageHeight={360}>
+<SiteHeader />
+<main id="main" class="agent-article">
+<header class="article-hero shell"><a class="article-back" href="/resources">Back to Resources</a><p class="eyebrow">AI SECURITY · EXPLAINED SIMPLY{site.preview ? " · REVIEW DRAFT" : ""}</p>
+<h1>AI agents need more than access.<br/><span>They need enforceable authority.</span></h1>
+<figure class="editorial-hero"><img src="/images/yahoo-finance-agent-access-648.webp" srcset="/images/yahoo-finance-agent-access-480.webp 480w, /images/yahoo-finance-agent-access-648.webp 648w" sizes="(max-width: 688px) calc(100vw - 40px), 648px" width="648" height="360" fetchpriority="high" alt="Yahoo Finance Market Domination Overtime screenshot: two speakers discuss banks restricting third-party AI agents; the original title and lower-third banner remain visible."/><figcaption>User-supplied screenshot of <a href="https://finance.yahoo.com/technology/ai/articles/ai-agents-accessing-u-bank-151012043.html">Yahoo Finance’s Market Domination Overtime</a>. The on-screen wording is the broadcaster’s framing; this guide does not assert a confirmed bank compromise.</figcaption></figure>
+<p class="article-deck">Connecting an account is not permission for every action inside it. The banking debate is a useful reason to check what your agents can do—and who actually authorizes it.</p>
+<div class="article-meta"><span>Truva Solutions</span><span>8 min read</span><ArticleViewCount /><time datetime="2026-10-24">24 October 2026</time></div>
+<p class="update-note">{site.preview ? "Local review draft. " : ""}Sources reviewed 24 October 2026. This guide distinguishes access risks from evidence of compromise.</p></header>
+<div class="article-layout shell"><article class="article-body" aria-label="AI agent authority guide">
+
+<details class="mobile-contents"><summary>Table of contents</summary><nav aria-label="Mobile table of contents">{contents.map(([id,label],i)=><a href={`#${id}`}>{i+1}. {label}</a>)}</nav></details>
+<div class="takeaway"><strong>The short answer</strong><p>Give agents the smallest useful set of tools and permissions. Require an independent authorization check for the exact consequential action. Then test that changed, replayed or revoked authority cannot get through.</p></div>
+<div class="fact-strip" aria-label="Guide at a glance"><div><strong>3</strong><span>distinct permission questions</span></div><div><strong>6</strong><span>control areas to review</span></div><div><strong>5</strong><span>tests before production</span></div></div><p class="fact-source">Counts describe the framework in this guide, not incident statistics.</p>
+
+<section id="reported"><h2>1. What was actually reported?</h2>
+<p>Axios reported concerns about agents accessing bank accounts. <a href="#source-6">[6]</a> Axios later reported banks said they had seen no evidence of hacks affecting customer funds or accounts. <a href="#source-7">[7]</a></p>
+<p>The bank’s own statement provides primary-source context. In its October 13 earnings discussion, JPMorgan Chase described blocking credential-sharing and screen-scraping agent access where possible while developing safer approaches. That is a concern about how agents access accounts; it does not establish that an attacker compromised the bank. <a href="#source-1">[1, pp. 3, 10]</a></p>
+<div class="plain-note"><strong>This is an authorization and governance problem</strong><p>This article does not describe a disclosed CVE or a product-specific defect with a fixed software version. Predictions about wider financial disruption are opinions. The practical question is whether a system can stop an agent from doing something its user never authorized.</p></div>
+</section>
+<section id="authority"><h2>2. Three different permissions</h2>
+<p>“The customer connected the account” is only the beginning. Access to an account, permission to use a particular access method, and authority to perform a particular action answer different questions.</p>
+<figure class="lead-visual"><img src="/images/agent-authority-cover.svg" width="1200" height="675" loading="lazy" alt="Three separate checks: customer account access, provider-permitted access method, and customer authority for the exact action."/><figcaption>Passing one check does not automatically satisfy the others.</figcaption></figure>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Three authorization questions"><table><caption>Three decisions to keep separate</caption><thead><tr><th scope="col">Decision</th><th scope="col">Question to answer</th><th scope="col">What it does not establish</th></tr></thead><tbody>
+<tr><td>Account access</td><td>Did the customer allow this agent to access this account and these data?</td><td>Permission to make every change available through that account.</td></tr>
+<tr><td>Access method</td><td>Does the provider permit this integration or method of access?</td><td>A customer mandate for a payment or other consequential action.</td></tr>
+<tr><td>Exact action</td><td>Did the customer authorize this recipient, amount and operation within the allowed time?</td><td>Permission for a different recipient, amount or later reuse.</td></tr>
+</tbody></table></div>
+<p>This is a practical review framework, not a universal statement of bank terms. Review the actual bank or provider agreement and integration rules. A customer’s permission does not automatically make every access method acceptable.</p>
+<div class="takeaway"><strong>Hypothetical example: finding a bill versus paying it</strong><p>A customer asks an assistant to find the electricity bill and summarize it. The assistant can also initiate payments through its connected tool. Finding the bill does not authorize paying it. Even “pay this bill” needs a defined recipient, amount and account, with the approved details checked at execution. This is an illustration, not a reported banking incident.</p></div>
+</section>
+<section id="failure"><h2>3. How excessive agency creates risk</h2>
+<p>OWASP describes excessive agency in terms of too much functionality, too many permissions, or too much autonomy. An agent does not need malicious intent to cause harm: it can misunderstand a task or use a capability outside the intended scope. <a href="#source-2">[2]</a></p>
+<p>A tool that can both retrieve an invoice and change its payment destination combines very different powers. A general-purpose browser or shell may expose more operations than the task needs. A broad credential can turn an incorrect decision into a real change.</p>
+<p>Untrusted retrieved content can also attempt to redirect an agent. Test that boundary, but do not confuse a possible failure mode with an observed cause: the banking discussion cited here does not establish that prompt injection caused the reported access. OWASP’s agent guidance treats input handling, tool controls and authorization as parts of a broader defense. <a href="#source-3">[3]</a></p>
+<div class="plain-note"><strong>Read-only is narrower, not risk-free</strong><p>A read-only tool removes some write risks. It can still expose balances, customer records or sensitive documents. Limit which data it can read, where those data can go, and what appears in logs.</p></div>
+</section>
+<section id="controls"><h2>4. Put authority into the system</h2>
+<p>Start with an inventory: each agent’s owner, identity, tools, accessible resources and write powers. Remove capabilities it does not need. Prefer narrow operations, such as retrieving an approved invoice, over unrestricted account access. OWASP recommends least privilege and controls around tool use and consequential actions. <a href="#source-3">[3]</a></p>
+<p><strong>Separate the proposal from execution.</strong> The model can propose an action. An independent control should decide whether that exact action may run. A prompt saying “ask permission first” is not an authorization mechanism.</p>
+<figure class="response-visual"><img src="/images/agent-authority-flow.svg" width="1200" height="675" loading="lazy" alt="Model proposes an action; approval binds its exact details; an independent authorization gate checks them before execution. Changed, expired or revoked authority is denied."/><figcaption>A recommended design pattern. Authorization is checked outside the model, immediately before execution.</figcaption></figure>
+<div class="table-scroll" role="region" tabindex="0" aria-label="Recommended authorization controls"><table><caption>Controls and the evidence to keep</caption><thead><tr><th scope="col">Control</th><th scope="col">Implementation question</th><th scope="col">Useful evidence</th></tr></thead><tbody>
+<tr><td>Narrow identity and tools</td><td>Can this identity perform only the task’s necessary operations on allowed resources?</td><td>Owner, tool list, permission policy and denied out-of-scope request.</td></tr>
+<tr><td>Bind the approval</td><td>Does approval cover the precise recipient or resource, amount or parameters, tool and expiry?</td><td>A recorded mandate and a rejection when approved details change.</td></tr>
+<tr><td>Check at execution</td><td>Are current permissions and the mandate checked independently before the action runs?</td><td>Revoked or expired authority fails closed.</td></tr>
+<tr><td>Prevent reuse</td><td>Can an approval be replayed or a retry duplicate a consequential action?</td><td>Replay protection and idempotency tests appropriate to the operation.</td></tr>
+<tr><td>Make delegation revocable</td><td>Can an owner stop the agent and remove delegated authority?</td><td>Attributable delegation records and a tested revocation path.</td></tr>
+<tr><td>Record outcomes safely</td><td>Are executed and denied actions logged without exposing secrets or unnecessary customer data?</td><td>Redacted records tying actor, mandate, decision and outcome together.</td></tr>
+</tbody></table></div>
+<p>The table translates OWASP’s guidance into implementation and review questions; it is not a claim that these were the mechanisms behind the banking report. <a href="#source-3">[3]</a></p>
+<div class="plain-note"><strong>Disconnect the authorization, not just the app</strong><p>CFPB’s July 2020 financial-data-sharing guidance explains that uninstalling an app does not end data sharing, and a password change may not terminate every connection. Explicitly revoke the service’s access and, where applicable, separately request deletion of retained data. This is historical consumer guidance, not a new AI advisory. <a href="#source-8">[8]</a></p></div>
+<p>In AWS, scope IAM actions and resources, constrain role assumptions, and use permissions boundaries where appropriate. Keep development and security administration separate. These controls limit what an agent identity can do; IAM alone does not establish that a customer approved a particular transaction. <a href="#source-4">[4]</a></p>
+<p>NIST’s February 2026 concept paper discusses agent identity, authorization, delegation and logging. It is a <strong>draft concept paper</strong>, not a binding standard, and its proposed scope excludes external untrusted agents. Use it as design context, not as proof that a third-party banking agent is approved. <a href="#source-5">[5]</a></p>
+</section>
+<section id="tests"><h2>5. Five tests before production</h2>
+<p>Run these recommended tests in a controlled environment with synthetic data and non-production actions. They test your controls; they are not claims about demonstrated banking attacks. Record both the expected decision and what actually executed.</p>
+<ol><li><strong>Out-of-scope action:</strong> give a read task to an agent with a write-capable integration. The system must reject the unauthorized write.</li>
+<li><strong>Changed target after approval:</strong> approve one recipient or resource, then change it or the amount. The earlier approval must not authorize the changed action.</li>
+<li><strong>Replayed approval:</strong> submit the same authorization again. It must not create an unintended second action; safe retries need operation-specific idempotency.</li>
+<li><strong>Revoked permissions:</strong> remove delegated access before execution. The action must fail closed even if the agent planned it earlier.</li>
+<li><strong>Malicious retrieved content:</strong> include instructions in a document that request an unrelated action. Those instructions must not create authority or bypass the execution gate.</li></ol>
+<p>Also check expiry, authorization-service failures and log redaction. A successful demonstration is evidence for the tested configuration, not a guarantee against every future failure. <a href="#source-3">[3]</a></p>
+</section>
+<section id="week"><h2>6. A practical first-week plan</h2>
+<p><strong>Start with exposure.</strong> List agents already connected to production systems. Assign an owner, identify sensitive reads and consequential writes, and pause unnecessary powers while reviewing them.</p>
+<p><strong>Define the mandate.</strong> Choose one high-impact workflow. Write down exactly what the agent may propose, what needs approval, how approval is bound to the action, and which system enforces it.</p>
+<p><strong>Prove the boundary.</strong> Run the five tests, fix gaps, and preserve the results. Confirm that revocation works and that operators can see denied as well as completed actions.</p>
+<p><strong>Plan for failure.</strong> Decide who can stop execution, who investigates, and which recovery options actually exist. Do not assume a payment or other external action can be undone. MFA, compliance reports and model instructions do not replace these action-level checks.</p>
+<div class="takeaway"><strong>The question to ask before granting production access</strong><p>Can this agent do something the user never authorized—and will our systems stop it before execution?</p></div>
+</section>
+<section id="references" class="references"><h2>7. References</h2><p>Primary guidance and news reporting. In-text numbers link to the sources below.</p><ol><li id="source-1"><a href="https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/quarterly-earnings/2026/3rd-quarter/3q26-earnings-transcript.pdf">JPMorgan Chase: Q3 2026 earnings transcript, 13 October, pp. 3 and 10</a></li><li id="source-2"><a href="https://genai.owasp.org/llmrisk/llm062025-excessive-agency/">OWASP: Excessive Agency</a></li><li id="source-3"><a href="https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html">OWASP: AI Agent Security Cheat Sheet</a></li><li id="source-4"><a href="https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensec05-bp01.html">AWS Generative AI Lens: scope permissions for AI agents</a></li><li id="source-5"><a href="https://www.nccoe.nist.gov/sites/default/files/2026-02/accelerating-the-adoption-of-software-and-ai-agent-identity-and-authorization-concept-paper.pdf">NIST NCCoE: agent identity and authorization concept paper, February 2026 draft</a></li><li id="source-6"><a href="https://www.axios.com/2026/10/22/ai-agents-banks-unauthorized-accounts-access">Axios (22 Oct)</a></li><li id="source-7"><a href="https://www.axios.com/2026/10/23/ai-catastrophe-wall-street">Axios (23 Oct)</a></li><li id="source-8"><a href="https://www.consumerfinance.gov/archive/blog/what-to-consider-when-sharing-your-financial-data/">CFPB: financial data sharing guidance, 24 July 2020 (archive)</a></li></ol></section><section class="article-next"><h2>Test authority before granting access.</h2><p>Truva can help review agent permissions, approval paths and execution controls, then turn findings into a practical remediation plan.</p><BookingLink label="Discuss your AI security review" /></section></article><aside class="article-sidebar"><nav aria-label="Table of contents"><p class="eyebrow">TABLE OF CONTENTS</p>{contents.map(([id,label],i)=><a href={`#${id}`}><span>{i+1}</span>{label}</a>)}</nav></aside></div></main><SiteFooter /></Base><style>
+  .mobile-contents {
+    display: none;
+  }
+  .mobile-contents summary {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-brand-blue);
+    cursor: pointer;
+  }
+  .mobile-contents a {
+    display: block;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 5px 0;
+  }
+  .mobile-contents nav {
+    padding-top: 12px;
+  }
+  .article-hero {
+    padding-block: 28px 24px;
+  }
+  .article-back {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-brand-blue);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(30px, 3.7vw, 47px);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+    margin: 16px 0 20px;
+  }
+  h1 span {
+    color: var(--color-brand-blue);
+  }
+  .article-deck {
+    font-size: 19px;
+    line-height: 1.6;
+    max-width: 850px;
+    color: var(--color-muted);
+  }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    font-size: 12px;
+    color: var(--color-muted);
+    margin: 20px 0 12px;
+  }
+  .update-note {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    max-width: 850px;
+  }
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 780px) 280px;
+    gap: 44px;
+    align-items: start;
+    justify-content: space-between;
+    padding-block: 10px 64px;
+  }
+  .article-body {
+    min-width: 0;
+  }
+  .article-body section {
+    scroll-margin-top: 90px;
+    margin-top: 42px;
+  }
+  .article-body h2 {
+    font-size: clamp(23px, 2.3vw, 29px);
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    margin-bottom: 18px;
+  }
+  .article-body p,
+  .article-body li {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .article-body p + p {
+    margin-top: 16px;
+  }
+  .article-body strong {
+    font-weight: 700;
+  }
+  .article-body ul,
+  .references ol {
+    padding-left: 22px;
+    margin-top: 14px;
+  }
+  .article-body li + li {
+    margin-top: 10px;
+  }
+  .article-body code {
+    font-size: 0.9em;
+    background: #edf2f9;
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+  .lead-visual img,
+  .response-visual img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    display: block;
+  }
+  .lead-visual figcaption,
+  .response-visual figcaption {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin-top: 10px;
+  }
+  .response-visual {
+    margin-top: 40px;
+  }
+  .takeaway {
+    background: #fff5ed;
+    border-left: 3px solid var(--color-action);
+    padding: 20px 24px;
+    margin-top: 28px;
+  }
+  .takeaway > strong {
+    font-size: 17px;
+  }
+  .takeaway p {
+    margin-top: 7px;
+  }
+  .fact-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--color-line);
+    margin-top: 25px;
+    border-radius: 8px;
+  }
+  .fact-strip > div {
+    padding: 18px 12px;
+    text-align: center;
+  }
+  .fact-strip > div + div {
+    border-left: 1px solid var(--color-line);
+  }
+  .fact-strip strong {
+    display: block;
+    font-size: 27px;
+    color: var(--color-brand-blue);
+    letter-spacing: -0.03em;
+  }
+  .fact-strip span {
+    display: block;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--color-muted);
+    margin-top: 5px;
+  }
+  .article-body .fact-source {
+    font-size: 10px;
+    color: var(--color-muted);
+    margin-top: 9px;
+  }
+  .fact-source a {
+    text-decoration: underline;
+  }
+  .plain-note {
+    padding: 20px 24px;
+    background: #f1f5fb;
+    margin-top: 22px;
+  }
+  .plain-note > strong {
+    color: var(--color-brand-blue);
+  }
+  .plain-note p {
+    margin-top: 7px;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    margin-block: 22px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 520px;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  caption {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 15px 17px;
+    background: #fff5ed;
+    color: #7c3513;
+  }
+  th {
+    background: #eef3fa;
+    font-weight: 700;
+    color: var(--color-brand-blue);
+  }
+  td,
+  th {
+    padding: 14px 16px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-line);
+  }
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  td:first-child {
+    width: 26%;
+  }
+  .article-sidebar {
+    position: sticky;
+    top: 88px;
+  }
+  .article-sidebar nav {
+    border: 1px solid var(--color-line);
+    border-top: 3px solid var(--color-action);
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+  }
+  .article-sidebar .eyebrow {
+    color: var(--color-brand-blue);
+    font-size: 11px;
+    margin-bottom: 15px;
+  }
+  .article-sidebar a {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 8px 0;
+    color: var(--color-muted);
+  }
+  .article-sidebar a span {
+    color: var(--color-brand-blue);
+    font-variant-numeric: tabular-nums;
+    min-width: 12px;
+  }
+  .article-sidebar a:hover,
+  .references a:hover {
+    color: var(--color-brand-blue);
+    text-decoration: underline;
+  }
+  .references {
+    border-top: 1px solid var(--color-line);
+    padding-top: 30px;
+  }
+  .references li,
+  .references p {
+    font-size: 13px;
+  }
+  .references a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .article-next {
+    background: #fff5ed;
+    padding: 26px;
+    border-radius: 8px;
+  }
+  .article-next :global(.btn) {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr) 240px;
+      gap: 24px;
+    }
+    .article-sidebar nav {
+      padding: 17px;
+    }
+    .article-deck {
+      font-size: 17px;
+    }
+  }
+  @media (max-width: 720px) {
+    .article-hero {
+      padding-top: 24px;
+    }
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+    .article-sidebar {
+      display: none;
+    }
+    .mobile-contents {
+      display: block;
+      margin-top: 20px;
+      border: 1px solid var(--color-line);
+      padding: 16px;
+      border-radius: 8px;
+    }
+    .article-sidebar nav {
+      padding: 17px 20px;
+    }
+    .article-sidebar a {
+      padding: 5px 0;
+    }
+    .article-body section {
+      margin-top: 32px;
+    }
+    .article-body p,
+    .article-body li {
+      font-size: 15px;
+    }
+    .fact-strip strong {
+      font-size: 23px;
+    }
+    .fact-strip span {
+      font-size: 10px;
+    }
+    .takeaway,
+    .plain-note {
+      padding: 17px;
+    }
+    .lead-visual figcaption {
+      font-size: 10px;
+    }
+    h1 {
+      font-size: 32px;
+    }
+    .article-back {
+      margin-bottom: 20px;
+    }
+    table {
+      min-width: 510px;
+    }
+  }
+.article-body a[href^="#source-"] { color: var(--color-brand-blue); text-decoration: underline; }
+.article-body ol { list-style: decimal; padding-left: 24px; margin-top: 14px; }
+.editorial-hero { margin: 24px 0; max-width: 648px; }
+.editorial-hero img { display: block; width: 100%; height: auto; aspect-ratio: 648 / 360; border-radius: 0; }
+.editorial-hero figcaption { font-size: 11px; line-height: 1.6; color: var(--color-muted); margin-top: 9px; }
+.editorial-hero figcaption a { text-decoration: underline; }
+</style>
